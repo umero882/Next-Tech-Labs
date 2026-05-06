@@ -23,7 +23,6 @@ import { StatusDot } from '@/components/ui/StatusDot';
 import { fadeUp, stagger } from '@/lib/motion';
 
 const SHOT = (n) => `/projects/password-manager/pw-${n}.jpeg`;
-const ICON = '/projects/password-manager.png';
 
 const heroShots = [SHOT(1), SHOT(6), SHOT(8)];
 
@@ -225,10 +224,6 @@ export default function PasswordManagerPage() {
                   }}
                 />
                 <PhoneFrame src={SHOT(6)} alt="Password Vault home screen" />
-                {/* Floating logo badge */}
-                <div className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl border border-border bg-bg-secondary p-2 shadow-xl shadow-black/40 hidden md:block">
-                  <img src={ICON} alt="" className="w-full h-full object-contain rounded-xl" />
-                </div>
               </div>
             </motion.div>
           </div>
@@ -497,6 +492,40 @@ export default function PasswordManagerPage() {
                   <SpecRow k="Author" v="Next Tech Labs" />
                 </div>
               </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ───────────── LEGAL & SUPPORT ───────────── */}
+      <section className="border-b border-border">
+        <Container className="py-14 md:py-16">
+          <div className="flex flex-wrap items-center justify-between gap-6">
+            <div>
+              <SectionLabel number="·" label="LEGAL & SUPPORT" />
+              <p className="mt-3 text-text-secondary max-w-xl">
+                Everything users need to evaluate trust before they install — and to find help once they do.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to="/projects/password-manager/support"
+                className="label-mono px-4 py-2 rounded-full border border-border text-text-secondary hover:text-accent hover:border-[var(--color-accent-border)] transition-colors"
+              >
+                Support
+              </Link>
+              <Link
+                to="/projects/password-manager/privacy"
+                className="label-mono px-4 py-2 rounded-full border border-border text-text-secondary hover:text-accent hover:border-[var(--color-accent-border)] transition-colors"
+              >
+                Privacy
+              </Link>
+              <Link
+                to="/projects/password-manager/terms"
+                className="label-mono px-4 py-2 rounded-full border border-border text-text-secondary hover:text-accent hover:border-[var(--color-accent-border)] transition-colors"
+              >
+                Terms
+              </Link>
             </div>
           </div>
         </Container>

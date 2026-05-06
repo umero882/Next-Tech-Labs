@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 
 const links = [
-  { to: '/projects', label: 'Work' },
-  { to: '/services', label: 'Services' },
-  { to: '/about',    label: 'About' },
-  { to: '/contact',  label: 'Contact' },
+  { to: '/',           label: 'Home', end: true },
+  { to: '/projects',   label: 'Products' },
+  { to: '/categories', label: 'Categories' },
+  { to: '/tech',       label: 'Tech' },
+  { to: '/contact',    label: 'Contact' },
+  { to: '/about',      label: 'About' },
 ];
 
 export function Navbar() {
@@ -43,6 +45,7 @@ export function Navbar() {
             <NavLink
               key={l.to}
               to={l.to}
+              end={l.end}
               className={({ isActive }) =>
                 cn(
                   'label-mono px-3 py-2 rounded-md transition-colors',
@@ -93,6 +96,7 @@ export function Navbar() {
                 <NavLink
                   key={l.to}
                   to={l.to}
+                  end={l.end}
                   onClick={closeMenu}
                   className={({ isActive }) =>
                     cn(

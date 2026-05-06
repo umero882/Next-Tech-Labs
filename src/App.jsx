@@ -9,6 +9,11 @@ import { SectionLabel } from '@/components/ui/SectionLabel';
 const HomePage          = lazy(() => import('@/pages/HomePage'));
 const ProjectsPage      = lazy(() => import('@/pages/ProjectsPage'));
 const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage'));
+const PMSupport         = lazy(() => import('@/pages/projects/PasswordManagerSupportPage'));
+const PMPrivacy         = lazy(() => import('@/pages/projects/PasswordManagerPrivacyPage'));
+const PMTerms           = lazy(() => import('@/pages/projects/PasswordManagerTermsPage'));
+const CategoriesPage    = lazy(() => import('@/pages/CategoriesPage'));
+const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
 const AboutPage         = lazy(() => import('@/pages/AboutPage'));
 const ContactPage       = lazy(() => import('@/pages/ContactPage'));
@@ -58,10 +63,50 @@ export default function App() {
             }
           />
           <Route
+            path="projects/password-manager/support"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <PMSupport />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/password-manager/privacy"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <PMPrivacy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/password-manager/terms"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <PMTerms />
+              </Suspense>
+            }
+          />
+          <Route
             path="projects/:id"
             element={
               <Suspense fallback={<PageFallback />}>
                 <ProjectDetailPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="categories"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <CategoriesPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="tech"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <TechPage />
               </Suspense>
             }
           />

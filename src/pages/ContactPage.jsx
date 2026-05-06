@@ -46,11 +46,11 @@ export default function ContactPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6"
         >
           <ChannelCard
-            href={`mailto:${company.channels.email}`}
+            href={`mailto:${company.channels.email}?subject=Hello%20from%20the%20site`}
             icon={Mail}
             label="Email"
             value={company.channels.email}
-            note="The slow channel. We read every one."
+            note="We read every one and reply within 1–2 business days."
           />
           <ChannelCard
             href={company.channels.whatsapp}

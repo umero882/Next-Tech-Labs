@@ -19,7 +19,7 @@ export const company = {
     },
   ],
   channels: {
-    email: 'hello@nexttechlabs.com',
+    email: 'help@nextechlabs.org',
     whatsapp: 'https://wa.me/000000000',
     whatsappLabel: '+000 000 000',
   },
