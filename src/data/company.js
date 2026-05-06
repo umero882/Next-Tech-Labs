@@ -20,8 +20,8 @@ export const company = {
   ],
   channels: {
     email: 'help@nextechlabs.org',
-    whatsapp: 'https://wa.me/000000000',
-    whatsappLabel: '+000 000 000',
+    whatsapp: 'https://wa.me/971585868560',
+    whatsappLabel: '+971 58 586 8560',
   },
   socials: [
     { id: 'youtube', name: 'YouTube', url: 'https://www.youtube.com/' },

@@ -108,7 +108,7 @@ export const projects = [
     ],
     links: {},
     featured: true,
-    cover: { type: 'mesh', tokens: ['#27C45A', '#7F4DF3', '#58A6FF'] },
+    cover: { type: 'image', image: '/projects/ethiopian-maids.png', size: 'contain' },
   },
 
   // ────────────────────────────────────────────────────────
