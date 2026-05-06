@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Brand tokens — locked. See docs/ui-context.md §2.
+   These are exposed as Tailwind utilities (bg-*, text-*, etc).
+   ============================================================ */
+
+@theme {
+  /* Surfaces */
+  --color-bg-primary: #0D1117;
+  --color-bg-secondary: #161B22;
+  --color-bg-tertiary: #21262D;
+
+  /* Text */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #C8C8C8;
+  --color-text-muted: #8B949E;
+
+  /* Accent (purple) */
+  --color-accent: #7F4DF3;
+  --color-accent-hover: #9D6FF5;
+  --color-accent-active: #6B3DD4;
+  --color-accent-light: rgba(127, 77, 243, 0.10);
+  --color-accent-border: rgba(127, 77, 243, 0.40);
+
+  /* Status */
+  --color-success: #27C45A;
+  --color-success-light: rgba(39, 196, 90, 0.10);
+  --color-warning: #D29922;
+  --color-warning-light: rgba(210, 153, 34, 0.10);
+  --color-error: #F85149;
+  --color-info: #58A6FF;
+
+  /* Borders */
+  --color-border: #30363D;
+  --color-border-muted: #21262D;
+
+  /* Type stacks */
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+
+  /* Container max */
+  --breakpoint-2xl: 1440px;
+
+  /* Custom easings (used by framer-motion via JS, exposed here for any CSS too) */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    background: var(--color-bg-primary);
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  /* Reset weird default focus, replace with explicit ring */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Display headlines pull a tighter optical size automatically */
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* Scrollbar — subtle on dark */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg-primary); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-bg-tertiary);
+    border-radius: 9999px;
+    border: 2px solid var(--color-bg-primary);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-border); }
+
+  /* Anchor reset */
+  a { color: inherit; text-decoration: none; }
+}
+
+/* ============================================================
+   Utility extras
+   ============================================================ */
+
+@layer utilities {
+  /* Editorial dot grid backdrop. Used only on hero / about hero. */
+  .grid-backdrop {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+    background-size: 32px 32px;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 70%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 70%, transparent 100%);
+  }
+
+  /* Tabular numerals for any data display */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" on;
+  }
+
+  /* Editorial label line: `01 / WORK` */
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Animated marquee — used for the tech ticker. */
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+
+  /* Reduce motion preference: kill the marquee */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee {
+      animation: none;
+    }
+  }
+
+  /* Subtle hairline border (1px on retina, 0.5px on hidpi) */
+  .border-hairline {
+    border-color: var(--color-border);
+  }
+}

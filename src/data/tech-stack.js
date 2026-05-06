@@ -1,0 +1,33 @@
+export const techStack = [
+  'React 19',
+  'React Native',
+  'Expo SDK 55',
+  'Vite 8',
+  'Next.js',
+  'Tailwind CSS 4',
+  'Framer Motion',
+  'Firebase Auth',
+  'Hasura GraphQL',
+  'Apollo Client 4',
+  'PostgreSQL',
+  'Nx Monorepo',
+  'Docker',
+  'Nginx',
+  'Prometheus',
+  'Grafana',
+  'Loki',
+  'Claude API',
+  'Remotion',
+  'Stripe',
+  'Playwright',
+];
+
+export const categories = [
+  { id: 'all',     label: 'All work' },
+  { id: 'mobile',  label: 'Mobile' },
+  { id: 'web',     label: 'Web' },
+  { id: 'ai-saas', label: 'AI / SaaS' },
+  { id: 'media',   label: 'Media' },
+  { id: 'tools',   label: 'Tools' },
+  { id: 'infra',   label: 'Infra' },
+];

@@ -1,0 +1,32 @@
+{
+  "name": "nexttech-portfolio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Next Tech Labs — portfolio site. Static, web-only, no backend.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
+    "react-window": "latest",
+    "use-debounce": "latest",
+    "clsx": "latest",
+    "tailwind-merge": "latest"
+  },
+  "devDependencies": {
+    "vite": "latest",
+    "@vitejs/plugin-react": "latest",
+    "tailwindcss": "latest",
+    "@tailwindcss/vite": "latest"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}
