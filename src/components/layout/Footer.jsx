@@ -48,11 +48,19 @@ export function Footer() {
         {/* Hairline */}
         <div className="mt-16 pt-6 border-t border-border-muted flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <p className="label-mono text-text-muted">
-            © {new Date().getFullYear()} {company.name}. All rights reserved.
+            Copyright © {new Date().getFullYear()} Next Tech Labs Inc. All rights reserved.
           </p>
-          <p className="label-mono text-text-muted">
-            Built with the <span className="text-text-primary">modular-app-architecture</span> skill.
-          </p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link to="/terms" className="label-mono text-text-muted hover:text-accent transition-colors">
+              Terms of Service
+            </Link>
+            <Link to="/privacy" className="label-mono text-text-muted hover:text-accent transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/contact" className="label-mono text-text-muted hover:text-accent transition-colors">
+              Contact Us
+            </Link>
+          </nav>
         </div>
       </Container>
     </footer>

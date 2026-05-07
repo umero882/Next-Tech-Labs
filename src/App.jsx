@@ -17,6 +17,8 @@ const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
 const AboutPage         = lazy(() => import('@/pages/AboutPage'));
 const ContactPage       = lazy(() => import('@/pages/ContactPage'));
+const TermsPage         = lazy(() => import('@/pages/TermsPage'));
+const PrivacyPage       = lazy(() => import('@/pages/PrivacyPage'));
 
 function PageFallback() {
   return (
@@ -131,6 +133,22 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <ContactPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="terms"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <TermsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="privacy"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <PrivacyPage />
               </Suspense>
             }
           />
