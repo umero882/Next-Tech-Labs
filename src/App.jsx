@@ -32,7 +32,7 @@ function NotFound() {
   return (
     <Container className="py-32 text-center">
       <SectionLabel number="404" label="NOT FOUND" />
-      <h1 className="mt-6 font-display text-5xl md:text-7xl font-semibold text-text-primary">
+      <h1 className="mt-6 font-display text-4xl md:text-6xl font-semibold text-text-primary">
         Nothing here.
       </h1>
       <p className="mt-4 text-text-muted">The page you wanted doesn't exist.</p>

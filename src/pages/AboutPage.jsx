@@ -26,7 +26,7 @@ export default function AboutPage() {
         <GridBackdrop />
         <Container className="pt-20 md:pt-28 pb-20 md:pb-28">
           <SectionLabel number="03" label="ABOUT" />
-          <h1 className="mt-6 font-display text-5xl md:text-7xl lg:text-8xl font-semibold text-text-primary tracking-tight leading-[0.98] max-w-5xl">
+          <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05] max-w-5xl">
             One studio.{' '}
             <span className="italic font-normal text-accent">One operator.</span>{' '}
             One rig.

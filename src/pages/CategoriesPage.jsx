@@ -35,7 +35,7 @@ export default function CategoriesPage() {
         <GridBackdrop />
         <Container className="pt-20 md:pt-28 pb-12 md:pb-16">
           <SectionLabel number="03" label="CATEGORIES" />
-          <h1 className="mt-6 font-display text-5xl md:text-7xl font-semibold text-text-primary tracking-tight leading-[1.0]">
+          <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05]">
             Browse the work,<br />
             <span className="italic font-normal text-accent">by surface.</span>
           </h1>

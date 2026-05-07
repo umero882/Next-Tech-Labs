@@ -18,7 +18,7 @@ export default function ServicesPage() {
         <GridBackdrop />
         <Container className="pt-20 md:pt-28 pb-16 md:pb-20">
           <SectionLabel number="02" label="SERVICES" />
-          <h1 className="mt-6 font-display text-5xl md:text-7xl font-semibold text-text-primary tracking-tight leading-[1.0] max-w-4xl">
+          <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05] max-w-4xl">
             Four practices,<br /> one stack,{' '}
             <span className="italic font-normal text-accent">one rig.</span>
           </h1>

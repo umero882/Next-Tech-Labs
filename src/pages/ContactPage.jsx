@@ -25,7 +25,7 @@ export default function ContactPage() {
         <GridBackdrop />
         <Container className="pt-20 md:pt-28 pb-12 md:pb-16">
           <SectionLabel number="04" label="CONTACT" />
-          <h1 className="mt-6 font-display text-5xl md:text-7xl font-semibold text-text-primary tracking-tight leading-[1.0] max-w-4xl">
+          <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05] max-w-4xl">
             Tell us what you’re building.{' '}
             <span className="italic font-normal text-accent">We’ll tell you how we’d ship it.</span>
           </h1>

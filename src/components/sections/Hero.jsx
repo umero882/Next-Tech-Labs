@@ -38,7 +38,7 @@ export function Hero() {
 
             <motion.h1
               variants={fadeUp}
-              className="mt-6 font-display font-semibold text-text-primary tracking-tight leading-[0.96] text-[44px] sm:text-[56px] md:text-[72px] lg:text-[88px]"
+              className="mt-6 font-display font-semibold text-text-primary tracking-tight leading-[1.04] text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
             >
               We build the products{' '}
               <span className="italic font-normal text-accent">people</span>{' '}
@@ -277,7 +277,7 @@ function PracticeTile({ icon: Icon, label, accent, position, delay, bob }) {
 function Stat({ n, label }) {
   return (
     <motion.div variants={fadeUp} className="border-l border-border pl-5">
-      <p className="font-display text-5xl md:text-6xl font-semibold text-text-primary tabular tracking-tight">
+      <p className="font-display text-4xl md:text-5xl font-semibold text-text-primary tabular tracking-tight">
         {n}
       </p>
       <p className="mt-3 text-sm text-text-muted leading-snug max-w-[16ch]">{label}</p>

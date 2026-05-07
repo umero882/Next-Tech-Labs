@@ -167,7 +167,7 @@ export default function PasswordManagerPage() {
 
               <motion.h1
                 variants={fadeUp}
-                className="mt-7 font-display text-5xl md:text-7xl lg:text-[88px] font-semibold text-text-primary leading-[0.96] tracking-tight"
+                className="mt-7 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary leading-[1.05] tracking-tight"
               >
                 Password Vault.
                 <br />
@@ -545,7 +545,7 @@ export default function PasswordManagerPage() {
         />
         <Container className="relative py-24 md:py-32 text-center">
           <SectionLabel number="·" label="WORK WITH US" className="justify-center" />
-          <h2 className="mt-5 font-display text-4xl md:text-6xl lg:text-7xl font-semibold text-text-primary tracking-tight leading-[1.02] max-w-3xl mx-auto">
+          <h2 className="mt-5 font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05] max-w-3xl mx-auto">
             Have a security-first app that needs shipping?
           </h2>
           <p className="mt-6 text-text-secondary text-lg leading-relaxed max-w-xl mx-auto">

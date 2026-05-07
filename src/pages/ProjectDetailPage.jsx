@@ -90,7 +90,7 @@ export default function ProjectDetailPage() {
         <motion.div variants={stagger} initial="hidden" animate="show" className="mt-6 max-w-4xl">
           <motion.h1
             variants={fadeUp}
-            className="font-display text-5xl md:text-7xl lg:text-[88px] font-semibold text-text-primary leading-[0.96] tracking-tight"
+            className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary leading-[1.05] tracking-tight"
           >
             {project.name}
           </motion.h1>

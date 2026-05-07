@@ -15,7 +15,7 @@ export function FeaturedProjects() {
         <div className="flex items-end justify-between gap-6 mb-12 md:mb-16">
           <div>
             <SectionLabel number="01" label="WORK" />
-            <h2 className="mt-4 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05]">
+            <h2 className="mt-4 font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-text-primary tracking-tight leading-[1.1]">
               The work that defines<br className="hidden md:inline" /> the studio.
             </h2>
           </div>

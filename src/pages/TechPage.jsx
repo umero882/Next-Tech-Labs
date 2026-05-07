@@ -46,7 +46,7 @@ export default function TechPage() {
         <GridBackdrop />
         <Container className="pt-20 md:pt-28 pb-12 md:pb-16">
           <SectionLabel number="04" label="TECH" />
-          <h1 className="mt-6 font-display text-5xl md:text-7xl font-semibold text-text-primary tracking-tight leading-[1.0]">
+          <h1 className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05]">
             One stack,<br />
             <span className="italic font-normal text-accent">across every product.</span>
           </h1>

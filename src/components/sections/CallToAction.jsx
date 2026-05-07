@@ -23,7 +23,7 @@ export function CallToAction() {
         >
           <SectionLabel number="04" label="START A PROJECT" />
 
-          <h2 className="mt-6 font-display text-4xl md:text-6xl lg:text-7xl font-semibold text-text-primary tracking-tight leading-[1.0]">
+          <h2 className="mt-6 font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.05]">
             Have something{' '}
             <span className="italic font-normal text-accent">stubborn</span>{' '}
             you want shipped?
