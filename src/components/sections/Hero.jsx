@@ -111,34 +111,32 @@ export function Hero() {
    skipping the video entirely.
    ───────────────────────────────────────────────────────── */
 function BrandVisual() {
-  // Lazily decide: have we already played the intro this session, or do we
-  // honor reduced-motion? In either case, jump straight to the static comp.
+  // Honor prefers-reduced-motion; otherwise always show the intro on load.
+  // (No sessionStorage gating any more — it caused the intro to silently
+  // disappear after a single play in the same tab.)
   const [phase, setPhase] = useState(() => {
     if (typeof window === 'undefined') return 'video';
-    if (sessionStorage.getItem('ntl-intro-played') === '1') return 'static';
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) return 'static';
     return 'video';
   });
   const videoRef = useRef(null);
 
   useEffect(() => {
-    if (phase !== 'video' || !videoRef.current) return;
-    // Some browsers reject autoplay on muted videos in tabs that haven't been
-    // interacted with — fall through to static if play() rejects.
+    if (phase !== 'video') return;
     const v = videoRef.current;
-    const p = v.play();
-    if (p && typeof p.catch === 'function') {
-      p.catch(() => {
-        sessionStorage.setItem('ntl-intro-played', '1');
-        setPhase('static');
-      });
-    }
-  }, [phase]);
+    if (!v) return;
 
-  function finish() {
-    sessionStorage.setItem('ntl-intro-played', '1');
-    setPhase('static');
-  }
+    // Belt + braces: also call play() programmatically. If the browser rejects
+    // autoplay, we DO NOT bail out — leaving the poster + final frame visible
+    // is still a correct end state.
+    v.play().catch(() => {});
+
+    // Safety net: if the `ended` event never fires (rare networking edge cases
+    // or stalled buffers), reveal the static composition after the known
+    // duration plus a small buffer.
+    const fallback = setTimeout(() => setPhase('static'), 5500);
+    return () => clearTimeout(fallback);
+  }, [phase]);
 
   return (
     <div className="relative w-full max-w-[440px] aspect-square">
@@ -149,11 +147,11 @@ function BrandVisual() {
             ref={videoRef}
             src="/intro.mp4"
             poster="/intro-poster.png"
+            autoPlay
             muted
             playsInline
             preload="auto"
-            onEnded={finish}
-            onError={finish}
+            onEnded={() => setPhase('static')}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
