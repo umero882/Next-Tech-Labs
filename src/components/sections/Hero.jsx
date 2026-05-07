@@ -126,16 +126,21 @@ function BrandVisual() {
     const v = videoRef.current;
     if (!v) return;
 
-    // Belt + braces: also call play() programmatically. If the browser rejects
-    // autoplay, we DO NOT bail out — leaving the poster + final frame visible
-    // is still a correct end state.
-    v.play().catch(() => {});
+    // Defer play() so the headline copy lands first. Without this, the video
+    // can buffer + auto-finish during initial page load, leaving the user
+    // staring at the static composition with no animation.
+    const startTimer = setTimeout(() => {
+      v.play().catch(() => {});
+    }, 700);
 
-    // Safety net: if the `ended` event never fires (rare networking edge cases
-    // or stalled buffers), reveal the static composition after the known
-    // duration plus a small buffer.
-    const fallback = setTimeout(() => setPhase('static'), 5500);
-    return () => clearTimeout(fallback);
+    // Safety net: if the `ended` event never fires (stalled buffer, autoplay
+    // refused, etc.) reveal the interactive static composition anyway.
+    const fallback = setTimeout(() => setPhase('static'), 8000);
+
+    return () => {
+      clearTimeout(startTimer);
+      clearTimeout(fallback);
+    };
   }, [phase]);
 
   return (
@@ -146,8 +151,9 @@ function BrandVisual() {
             key="intro"
             ref={videoRef}
             src="/intro.mp4"
-            poster="/intro-poster.png"
-            autoPlay
+            // No poster — we want frame 0 (dark bg) so the canvas reads as
+            // empty until the intro draws in. Showing the poster up-front
+            // would spoil the reveal.
             muted
             playsInline
             preload="auto"
