@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ShieldCheck, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Smartphone,
+  Globe,
+  Sparkles,
+  Server,
+} from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { GridBackdrop } from '@/components/ui/GridBackdrop';
@@ -63,14 +70,14 @@ export function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Visual column */}
+          {/* Brand composition column */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
             animate="show"
             className="lg:col-span-5 flex justify-center lg:justify-end"
           >
-            <HeroShowcase />
+            <BrandComposition />
           </motion.div>
         </div>
 
@@ -92,64 +99,177 @@ export function Hero() {
   );
 }
 
-function HeroShowcase() {
+/* ─────────────────────────────────────────────────────────
+   BrandComposition
+
+   Center: NTL monogram (mirrors /favicon.svg).
+   Around it: four practice tiles (Mobile, Web, AI, Infra) with brand colors.
+   Faint dotted lines connect each tile back to the center, signalling
+   "same modular architecture across every surface" — which is the studio's
+   thesis. Each tile bobs on its own rhythm so the composition feels alive
+   without distracting from the headline copy.
+   ───────────────────────────────────────────────────────── */
+function BrandComposition() {
   return (
-    <div className="relative w-full max-w-sm">
-      {/* Glow behind the phone */}
+    <div className="relative w-full max-w-[440px] aspect-square">
+      {/* Ambient glow */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10 blur-3xl opacity-60"
         style={{
           background:
-            'radial-gradient(circle at 50% 40%, rgba(127,77,243,0.42) 0%, transparent 60%), radial-gradient(circle at 70% 80%, rgba(39,196,90,0.35) 0%, transparent 60%)',
+            'radial-gradient(circle at 50% 50%, rgba(127,77,243,0.45) 0%, transparent 55%), radial-gradient(circle at 70% 80%, rgba(39,196,90,0.30) 0%, transparent 60%), radial-gradient(circle at 25% 25%, rgba(88,166,255,0.20) 0%, transparent 50%)',
         }}
       />
 
-      {/* Phone frame */}
-      <motion.div
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        className="relative rounded-[2.25rem] border border-border bg-bg-secondary p-2 shadow-2xl shadow-black/50 mx-auto"
+      {/* Connector lines (dotted), behind everything */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
       >
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-5 rounded-full bg-bg-primary z-10" />
-        <img
-          src="/projects/password-manager/pw-6.jpeg"
-          alt="Password Vault — one of Next Tech Labs' shipped products"
-          loading="eager"
-          fetchPriority="high"
-          className="block w-full rounded-[1.85rem] aspect-[9/19] object-cover object-top"
-        />
-      </motion.div>
+        {[
+          ['12,18', '50,50'],
+          ['88,18', '50,50'],
+          ['12,82', '50,50'],
+          ['88,82', '50,50'],
+        ].map(([a, b], i) => {
+          const [x1, y1] = a.split(',');
+          const [x2, y2] = b.split(',');
+          return (
+            <motion.line
+              key={i}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke="rgba(127,77,243,0.35)"
+              strokeWidth="0.25"
+              strokeDasharray="0.6 0.8"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.2 + i * 0.08 }}
+            />
+          );
+        })}
+      </svg>
 
-      {/* Floating annotations */}
-      <Annotation
-        icon={ShieldCheck}
-        label="AES-256, offline-first"
-        className="absolute -left-6 top-12 hidden md:flex"
-        delay={0.6}
+      {/* Practice tiles — corners of the diamond */}
+      <PracticeTile
+        icon={Smartphone}
+        label="Mobile"
+        accent="#27C45A"
+        position="top-2 left-0 sm:left-2"
+        delay={0.35}
+        bob={[0, -6, 0]}
       />
-      <Annotation
+      <PracticeTile
+        icon={Globe}
+        label="Web"
+        accent="#58A6FF"
+        position="top-2 right-0 sm:right-2"
+        delay={0.5}
+        bob={[0, -8, 0]}
+      />
+      <PracticeTile
         icon={Sparkles}
-        label="Shipped to Google Play"
-        className="absolute -right-6 bottom-16 hidden md:flex"
-        delay={0.85}
+        label="AI"
+        accent="#7F4DF3"
+        position="bottom-2 left-0 sm:left-2"
+        delay={0.65}
+        bob={[0, -7, 0]}
       />
+      <PracticeTile
+        icon={Server}
+        label="Infra"
+        accent="#D29922"
+        position="bottom-2 right-0 sm:right-2"
+        delay={0.8}
+        bob={[0, -5, 0]}
+      />
+
+      {/* Center monogram */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0 flex items-center justify-center"
+      >
+        <div className="relative">
+          {/* Slow rotating ring */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+            className="absolute inset-0 -m-3 rounded-3xl border border-dashed border-[var(--color-accent-border)]"
+          />
+          {/* Pulse halo */}
+          <motion.div
+            animate={{ scale: [1, 1.06, 1], opacity: [0.5, 0.8, 0.5] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute inset-0 rounded-3xl bg-accent/15 blur-md"
+          />
+
+          {/* The mark */}
+          <div
+            className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-bg-secondary border border-border flex items-center justify-center shadow-2xl shadow-black/50"
+            aria-label="Next Tech Labs monogram"
+          >
+            <svg width="68" height="68" viewBox="0 0 64 64" aria-hidden="true">
+              <path
+                d="M16 46 V18 L32 38 V18 H40"
+                stroke="#7F4DF3"
+                strokeWidth="5"
+                fill="none"
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+              />
+              <circle cx="46" cy="46" r="3.5" fill="#27C45A" />
+            </svg>
+          </div>
+
+          {/* Tiny tag */}
+          <p className="absolute -bottom-7 left-1/2 -translate-x-1/2 label-mono text-text-muted whitespace-nowrap">
+            <span className="text-text-primary">Next Tech</span>
+            <span className="text-accent">.</span>
+            <span className="text-text-primary">Labs</span>
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 }
 
-function Annotation({ icon: Icon, label, className = '', delay = 0 }) {
+function PracticeTile({ icon: Icon, label, accent, position, delay, bob }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+      initial={{ opacity: 0, y: 12, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={`items-center gap-2 rounded-full border border-border bg-bg-secondary/95 backdrop-blur px-3 py-2 shadow-lg shadow-black/40 ${className}`}
+      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={`absolute ${position}`}
     >
-      <span className="w-6 h-6 rounded-full bg-accent-light text-accent inline-flex items-center justify-center">
-        <Icon size={12} strokeWidth={2} />
-      </span>
-      <span className="label-mono text-text-secondary whitespace-nowrap">{label}</span>
+      <motion.div
+        animate={{ y: bob }}
+        transition={{
+          duration: 6 + Math.random() * 2,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="rounded-2xl border border-border bg-bg-secondary/95 backdrop-blur p-3 sm:p-4 shadow-xl shadow-black/40 flex items-center gap-2.5 min-w-[110px]"
+      >
+        <span
+          className="w-9 h-9 rounded-xl inline-flex items-center justify-center flex-none"
+          style={{ background: `${accent}1f`, color: accent }}
+        >
+          <Icon size={18} strokeWidth={1.75} />
+        </span>
+        <div className="min-w-0">
+          <p className="label-mono" style={{ color: accent }}>
+            {label}
+          </p>
+          <p className="text-[11px] text-text-muted leading-tight mt-0.5">Practice</p>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
