@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -77,7 +78,7 @@ export function Hero() {
             animate="show"
             className="lg:col-span-5 flex justify-center lg:justify-end"
           >
-            <BrandComposition />
+            <BrandVisual />
           </motion.div>
         </div>
 
@@ -96,6 +97,83 @@ export function Hero() {
         </motion.div>
       </Container>
     </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   BrandVisual
+
+   Plays a 5s Remotion-rendered intro on first visit (cached via
+   sessionStorage so it doesn't replay on every nav back to home),
+   then crossfades into the static BrandComposition. The intro's last
+   frame and the static composition were designed to match, so the
+   handover is visually seamless. Respects prefers-reduced-motion by
+   skipping the video entirely.
+   ───────────────────────────────────────────────────────── */
+function BrandVisual() {
+  // Lazily decide: have we already played the intro this session, or do we
+  // honor reduced-motion? In either case, jump straight to the static comp.
+  const [phase, setPhase] = useState(() => {
+    if (typeof window === 'undefined') return 'video';
+    if (sessionStorage.getItem('ntl-intro-played') === '1') return 'static';
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) return 'static';
+    return 'video';
+  });
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (phase !== 'video' || !videoRef.current) return;
+    // Some browsers reject autoplay on muted videos in tabs that haven't been
+    // interacted with — fall through to static if play() rejects.
+    const v = videoRef.current;
+    const p = v.play();
+    if (p && typeof p.catch === 'function') {
+      p.catch(() => {
+        sessionStorage.setItem('ntl-intro-played', '1');
+        setPhase('static');
+      });
+    }
+  }, [phase]);
+
+  function finish() {
+    sessionStorage.setItem('ntl-intro-played', '1');
+    setPhase('static');
+  }
+
+  return (
+    <div className="relative w-full max-w-[440px] aspect-square">
+      <AnimatePresence initial={false} mode="wait">
+        {phase === 'video' ? (
+          <motion.video
+            key="intro"
+            ref={videoRef}
+            src="/intro.mp4"
+            poster="/intro-poster.png"
+            muted
+            playsInline
+            preload="auto"
+            onEnded={finish}
+            onError={finish}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 w-full h-full object-cover rounded-3xl"
+            aria-label="Next Tech Labs intro animation"
+          />
+        ) : (
+          <motion.div
+            key="static"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0"
+          >
+            <BrandComposition />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
