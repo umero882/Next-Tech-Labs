@@ -70,7 +70,7 @@ export const projects = [
     ],
     links: {},
     featured: true,
-    cover: { type: 'orb', tokens: ['#F85149', '#7F4DF3', '#0D1117'] },
+    cover: { type: 'image', image: '/projects/real-news-hub.png', size: 'contain' },
   },
 
   {
