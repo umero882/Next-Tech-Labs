@@ -2,6 +2,12 @@ import { Container } from '@/components/ui/Container';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { techStack } from '@/data/tech-stack';
 
+const CDN = 'https://cdn.simpleicons.org';
+
+function logoUrl({ slug, color }) {
+  return color ? `${CDN}/${slug}/${color}` : `${CDN}/${slug}`;
+}
+
 export function TechStackTicker() {
   // Duplicate so the marquee is seamless — translate -50% lands the second copy in place
   const items = [...techStack, ...techStack];
@@ -24,17 +30,34 @@ export function TechStackTicker() {
             'linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%)',
         }}
       >
-        <div className="flex w-max animate-marquee">
+        <ul
+          className="flex w-max animate-marquee items-center"
+          aria-label="Stack we use across every project"
+        >
           {items.map((tech, i) => (
-            <span
-              key={`${tech}-${i}`}
-              className="inline-flex items-center gap-3 px-6 py-2 label-mono text-text-secondary"
+            <li
+              key={`${tech.name}-${i}`}
+              className="flex items-center gap-3 px-7 py-2"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />
-              {tech}
-            </span>
+              <img
+                src={logoUrl(tech)}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width="28"
+                height="28"
+                className="h-7 w-7 flex-none object-contain"
+                onError={(e) => {
+                  // Hide broken icon — leaves the text label as graceful fallback
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <span className="label-mono text-text-secondary whitespace-nowrap">
+                {tech.name}
+              </span>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
