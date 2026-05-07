@@ -24,10 +24,11 @@ export function Footer() {
             title="Site"
             items={[
               { label: 'Home', href: '/' },
-              { label: 'Work', href: '/projects' },
-              { label: 'Services', href: '/services' },
-              { label: 'About', href: '/about' },
+              { label: 'Products', href: '/projects' },
+              { label: 'Categories', href: '/categories' },
+              { label: 'Tech', href: '/tech' },
               { label: 'Contact', href: '/contact' },
+              { label: 'About', href: '/about' },
             ]}
           />
 
@@ -36,7 +37,7 @@ export function Footer() {
             items={[
               { label: 'Email', href: `mailto:${company.channels.email}`, external: true },
               { label: 'WhatsApp', href: company.channels.whatsapp, external: true },
-              ...company.socials.slice(0, 4).map((s) => ({
+              ...company.socials.map((s) => ({
                 label: s.name,
                 href: s.url,
                 external: true,

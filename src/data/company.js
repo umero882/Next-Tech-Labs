@@ -23,14 +23,9 @@ export const company = {
     whatsapp: 'https://wa.me/971585868560',
     whatsappLabel: '+971 58 586 8560',
   },
-  socials: [
-    { id: 'youtube', name: 'YouTube', url: 'https://www.youtube.com/' },
-    { id: 'instagram', name: 'Instagram', url: 'https://www.instagram.com/' },
-    { id: 'facebook', name: 'Facebook', url: 'https://www.facebook.com/' },
-    { id: 'tiktok', name: 'TikTok', url: 'https://www.tiktok.com/' },
-    { id: 'github', name: 'GitHub', url: 'https://github.com/' },
-    { id: 'linkedin', name: 'LinkedIn', url: 'https://www.linkedin.com/' },
-  ],
+  // Add real social URLs here when handles are live; UI gracefully hides
+  // the social blocks while this array is empty.
+  socials: [],
   rig: {
     host: 'Hostinger VPS',
     runtime: 'Docker',

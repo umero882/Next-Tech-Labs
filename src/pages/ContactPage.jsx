@@ -102,7 +102,8 @@ export default function ContactPage() {
           </motion.aside>
         </div>
 
-        {/* Socials */}
+        {/* Socials — only renders when company.socials has entries */}
+        {company.socials.length > 0 && (
         <div className="mt-20 md:mt-24">
           <SectionLabel number="·" label="ELSEWHERE" />
           <h2 className="mt-4 font-display text-3xl md:text-4xl font-semibold text-text-primary tracking-tight">
@@ -147,6 +148,7 @@ export default function ContactPage() {
             })}
           </motion.div>
         </div>
+        )}
       </Container>
     </>
   );
