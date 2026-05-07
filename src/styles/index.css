@@ -149,9 +149,13 @@
     text-transform: uppercase;
   }
 
-  /* Animated marquee — used for the tech ticker. */
+  /* Animated marquee — used for the tech ticker.
+     The element duplicates its children, so translating from 0 to -50%
+     produces a seamless infinite loop. will-change/translate3d keep it on
+     the compositor (no main-thread layout per frame). */
   .animate-marquee {
-    animation: marquee 40s linear infinite;
+    animation: marquee 25s linear infinite;
+    will-change: transform;
   }
 
   @keyframes marquee {
@@ -159,10 +163,12 @@
     to   { transform: translate3d(-50%, 0, 0); }
   }
 
-  /* Reduce motion preference: kill the marquee */
+  /* Reduced-motion: don't kill the marquee outright (the section becomes
+     dead space without it); slow it down so it's still legible motion
+     for users who'd prefer less. */
   @media (prefers-reduced-motion: reduce) {
     .animate-marquee {
-      animation: none;
+      animation-duration: 90s;
     }
   }
 
