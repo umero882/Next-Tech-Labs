@@ -12,6 +12,8 @@ const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage'));
 const PMSupport         = lazy(() => import('@/pages/projects/PasswordManagerSupportPage'));
 const PMPrivacy         = lazy(() => import('@/pages/projects/PasswordManagerPrivacyPage'));
 const PMTerms           = lazy(() => import('@/pages/projects/PasswordManagerTermsPage'));
+const FBPrivacy         = lazy(() => import('@/pages/projects/FirstBitePrivacyPage'));
+const FBTerms           = lazy(() => import('@/pages/projects/FirstBiteTermsPage'));
 const CategoriesPage    = lazy(() => import('@/pages/CategoriesPage'));
 const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
@@ -85,6 +87,22 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <PMTerms />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/first-bite/privacy"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <FBPrivacy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/first-bite/terms"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <FBTerms />
               </Suspense>
             }
           />

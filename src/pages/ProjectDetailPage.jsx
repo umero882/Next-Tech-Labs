@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ExternalLink } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -15,6 +15,7 @@ import { fadeUp, stagger } from '@/lib/motion';
 
 const customPages = {
   'password-manager': lazy(() => import('@/pages/projects/PasswordManagerPage')),
+  'first-bite': lazy(() => import('@/pages/projects/FirstBitePage')),
 };
 
 export default function ProjectDetailPage() {
@@ -150,6 +151,20 @@ export default function ProjectDetailPage() {
                 ))}
               </div>
             </div>
+
+            {project.links?.live && (
+              <a
+                href={project.links.live}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="block"
+              >
+                <Button variant="outline" className="w-full" size="md">
+                  Visit live site
+                  <ExternalLink size={14} strokeWidth={2} />
+                </Button>
+              </a>
+            )}
 
             <Link to="/contact" className="block">
               <Button className="w-full" size="md">

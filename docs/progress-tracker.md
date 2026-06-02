@@ -10,7 +10,7 @@
 | Metric | Value |
 |---|---|
 | Phase | M1 — Initial scaffold |
-| Last updated | 2026-05-06 |
+| Last updated | 2026-06-02 |
 | Next milestone | M2 — Polish + real cover art per project |
 | Live URL | _not deployed yet_ |
 | Lighthouse (Mobile) | _not measured yet — capture on first deploy_ |
@@ -61,6 +61,13 @@ _Move items here when started, move out when done._
 ---
 
 ## Done log
+
+### 2026-06-02
+- ✅ Added **First Bite** (`first-bite`, P-19) to `data/projects.js` — baby allergy-prevention Expo SDK 56 app, `mobile` category, `beta`, featured. Sourced from the repo at `C:\dev\Projects\Firs Bite` (PRD.md / README.md, 130 commits, store-readiness complete).
+- ✅ Wired conditional **"Visit live site"** outline button into `ProjectDetailPage` meta aside — renders only when `project.links.live` is set. First Bite live link: `https://coolify.nextechlabs.tech/`. (First project to populate `links`.)
+- ✅ Built custom **First Bite showcase page** (`pages/projects/FirstBitePage.jsx`, registered in `ProjectDetailPage` customPages) — hero, app showcase, six-feature grid, three deep dives, safety/evidence dossier, trust-first monetization, build spec. Mirrors the Password Manager page pattern. Uses real app marketing assets copied to `public/projects/first-bite/` (icon + 3 onboarding shots; dropped the 5 MB paywall PNG for perf).
+- ✅ Hosted **First Bite Privacy + Terms** at `/projects/first-bite/privacy` and `/projects/first-bite/terms` via `FirstBiteLegalLayout` + `FirstBitePrivacyPage` / `FirstBiteTermsPage` (reusing `legalProse`). Content written for a children's-health app (infant health data, reaction photos, Claude vision scanner, multi-caregiver sharing, RevenueCat, COPPA/GDPR-K, no-diagnosis disclaimers). Routes added to `App.jsx` before `/projects/:id`.
+- ⏳ Follow-up: First Bite app's `apps/mobile/lib/legal.js` still points to placeholder `firstbite.app/privacy|terms` — repoint to the hosted nextechlabs.org URLs (separate repo).
 
 ### 2026-05-06
 - ✅ Bootstrapped repo with the modular architecture skill (web-only profile, no Firebase/Hasura since no backend)

@@ -196,6 +196,29 @@ export const projects = [
     featured: true,
     cover: { type: 'image', image: '/projects/password-manager.png', size: 'contain' },
   },
+  {
+    id: 'first-bite',
+    code: 'P-19',
+    name: 'First Bite',
+    tagline: 'The allergy-prevention operating system for a baby\'s first 1,000 days.',
+    description:
+      'A native iOS + Android app that guides parents through evidence-based early-allergen introduction, keeps allergens safely in the diet to maintain tolerance, and answers one question in a tap: is this food, label, or menu safe for this baby right now? Built on an Expo SDK 56 monorepo with a fourteen-package domain layer, Firebase Auth and a Hasura GraphQL data graph, RevenueCat subscriptions, and Claude vision for the safety scanner.',
+    category: 'mobile',
+    status: 'beta',
+    year: 2026,
+    client: 'Internal — NextechLabs',
+    stack: ['Expo SDK 56', 'React Native', 'Expo Router', 'NativeWind', 'Firebase Auth', 'Hasura GraphQL', 'Claude API', 'RevenueCat'],
+    highlights: [
+      'AI Safety Scanner — Claude vision reads a label, menu, or recipe and returns a "safe for this baby?" verdict against the profile and hidden allergen derivatives',
+      'Allergen Protocol Engine — risk-stratified LEAP / EAT / NIAID introduction plans with post-introduction maintenance tracking',
+      'Multi-caregiver and daycare sync — real-time logging and daily handoffs across co-parents, grandparents, and nannies',
+      'Reaction log with anaphylaxis red-flag triage, auto-correlated against introduced foods',
+      'Fourteen-package domain monorepo on Expo SDK 56 (New Architecture); account deletion, legal links, and store-readiness complete',
+    ],
+    links: { live: 'https://coolify.nextechlabs.tech/' },
+    featured: true,
+    cover: { type: 'mesh', tokens: ['#27C45A', '#D29922', '#7F4DF3'] },
+  },
 
   // ────────────────────────────────────────────────────────
   // TIER 3 — BREADTH
