@@ -7,6 +7,7 @@ import { cn } from '@/lib/cn';
 const tabs = [
   { to: '/projects/first-bite/privacy', label: 'Privacy' },
   { to: '/projects/first-bite/terms', label: 'Terms' },
+  { to: '/projects/first-bite/delete-account', label: 'Delete account' },
 ];
 
 export function FirstBiteLegalLayout({ eyebrow, title, subtitle, effective, callout, children }) {

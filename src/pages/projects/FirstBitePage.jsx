@@ -508,6 +508,12 @@ export default function FirstBitePage() {
               >
                 Terms
               </Link>
+              <Link
+                to="/projects/first-bite/delete-account"
+                className="label-mono px-4 py-2 rounded-full border border-border text-text-secondary hover:text-accent hover:border-[var(--color-accent-border)] transition-colors"
+              >
+                Delete account
+              </Link>
             </div>
           </div>
         </Container>
