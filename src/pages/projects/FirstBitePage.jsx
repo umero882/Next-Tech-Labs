@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  ExternalLink,
   ShieldCheck,
   ScanLine,
   Users,
@@ -22,8 +21,6 @@ import { Badge } from '@/components/ui/Badge';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { StatusDot } from '@/components/ui/StatusDot';
 import { fadeUp, stagger } from '@/lib/motion';
-
-const LIVE_URL = 'https://coolify.nextechlabs.tech/';
 
 const ASSET = (n) => `/projects/first-bite/${n}`;
 
@@ -190,11 +187,11 @@ export default function FirstBitePage() {
               </motion.p>
 
               <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center gap-3">
-                <a href={LIVE_URL} target="_blank" rel="noreferrer noopener">
+                <Link to="/contact">
                   <Button size="lg">
-                    Visit live site <ExternalLink size={14} strokeWidth={2} />
+                    Build something like this <ArrowRight size={14} strokeWidth={2} />
                   </Button>
-                </a>
+                </Link>
                 <a href="#features">
                   <Button variant="outline" size="lg">
                     See what's inside
@@ -518,14 +515,6 @@ export default function FirstBitePage() {
               >
                 Terms
               </Link>
-              <a
-                href={LIVE_URL}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="label-mono px-4 py-2 rounded-full border border-border text-text-secondary hover:text-accent hover:border-[var(--color-accent-border)] transition-colors inline-flex items-center gap-1.5"
-              >
-                Live site <ExternalLink size={12} strokeWidth={2} />
-              </a>
             </div>
           </div>
         </Container>

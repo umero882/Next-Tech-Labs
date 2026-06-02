@@ -215,7 +215,7 @@ export const projects = [
       'Reaction log with anaphylaxis red-flag triage, auto-correlated against introduced foods',
       'Fourteen-package domain monorepo on Expo SDK 56 (New Architecture); account deletion, legal links, and store-readiness complete',
     ],
-    links: { live: 'https://coolify.nextechlabs.tech/' },
+    links: {},
     featured: true,
     cover: { type: 'mesh', tokens: ['#27C45A', '#D29922', '#7F4DF3'] },
   },

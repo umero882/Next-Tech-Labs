@@ -10,7 +10,7 @@
 |---|---|---|
 | `https://nextechlabs.org` | Public portfolio site | Apex |
 | `https://www.nextechlabs.org` | Public portfolio site | Same app, second host |
-| `https://coolify.nextechlabs.org` | Coolify dashboard (admin) | TLS, behind Cloud‑edge firewall on 443 |
+| `https://coolify.nextechlabs.tech` | Coolify dashboard (admin) | TLS, behind Cloud‑edge firewall on 443. This Coolify instance hosts `nextechlabs.org`. |
 
 All three TLS certs are Let's Encrypt, auto‑renewed by Traefik (Coolify‑managed proxy). No manual renewal action needed.
 
@@ -56,15 +56,15 @@ coolify              A  76.13.240.144   TTL 300
 | Server | localhost (uuid `tryriohi8f392b701scysv6k`) |
 | Destination | `coolify` Docker network |
 
-Auto‑deploy on push to `main` is **off** (no GitHub webhook configured). To redeploy after a push:
+Auto‑deploy on push to `main` is **off** (no GitHub webhook configured). To redeploy after a push, click *Deploy* in the dashboard at `https://coolify.nextechlabs.tech` (login + 2FA).
+
+> ⚠️ **API deploy is not currently usable.** The snippet below reads a bearer token from `C:\Admin\Coolify\api-token.txt`, but **that file does not exist** (see §6 — only SSH keys + a dashboard login are present). A tokenless call returns 401. To enable API/scripted deploys, create a token in *Settings → Keys & Tokens* and save it to that path; also re‑verify the `uuid` / tailnet IP below, which are unverified.
 
 ```bash
-TOKEN="$(cat C:/Admin/Coolify/api-token.txt)"   # see §6
+TOKEN="$(cat C:/Admin/Coolify/api-token.txt)"   # ⚠️ file missing — create first (see §6)
 curl -H "Authorization: Bearer $TOKEN" \
   -X POST "http://100.124.164.50:8000/api/v1/deploy?uuid=t9jfrtoz8q7h9jfzigp6fchv&force=true"
 ```
-
-Or click *Deploy* in the dashboard.
 
 ---
 
@@ -101,7 +101,7 @@ npm run build  # writes dist/
                   └─ :443 → Traefik
                             ├─ Host: nextechlabs.org      → portfolio app (nginx :80)
                             ├─ Host: www.nextechlabs.org  → portfolio app
-                            └─ Host: coolify.nextechlabs.org → coolify dashboard
+                            └─ Host: coolify.nextechlabs.tech → coolify dashboard
 
            Tailscale (overlay, no public exposure)
                   100.124.164.50 / nextechlabs-vps
