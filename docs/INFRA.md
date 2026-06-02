@@ -56,14 +56,22 @@ coolify              A  76.13.240.144   TTL 300
 | Server | localhost (uuid `tryriohi8f392b701scysv6k`) |
 | Destination | `coolify` Docker network |
 
-Auto‑deploy on push to `main` is **off** (no GitHub webhook configured). To redeploy after a push, click *Deploy* in the dashboard at `https://coolify.nextechlabs.tech` (login + 2FA).
+Auto‑deploy on push to `main` is **off** (no GitHub webhook configured). To redeploy after a push, either click *Deploy* in the dashboard at `https://coolify.nextechlabs.tech` (login + 2FA), or call the API **over the tailnet** (see below).
 
-> ⚠️ **API deploy is not currently usable.** The snippet below reads a bearer token from `C:\Admin\Coolify\api-token.txt`, but **that file does not exist** (see §6 — only SSH keys + a dashboard login are present). A tokenless call returns 401. To enable API/scripted deploys, create a token in *Settings → Keys & Tokens* and save it to that path; also re‑verify the `uuid` / tailnet IP below, which are unverified.
+Applications on this Coolify instance (verified live 2026‑06‑02):
 
-```bash
-TOKEN="$(cat C:/Admin/Coolify/api-token.txt)"   # ⚠️ file missing — create first (see §6)
-curl -H "Authorization: Bearer $TOKEN" \
-  -X POST "http://100.124.164.50:8000/api/v1/deploy?uuid=t9jfrtoz8q7h9jfzigp6fchv&force=true"
+| App | uuid | Domain(s) | Repo / branch |
+|---|---|---|---|
+| `nexttechlabs-portfolio` | `t9jfrtoz8q7h9jfzigp6fchv` | `nextechlabs.org`, `www.nextechlabs.org` | `umero882/Next-Tech-Labs` @ `main` |
+| `firstbite-hasura` | `b8nt6wnfav2lp95gepnhybn2` | `hasura.nextechlabs.tech` | — |
+
+> **API access is tailnet‑only.** The public FQDN (`https://coolify.nextechlabs.tech/api/...`) returns **403** by the IP allowlist; calls must originate from the tailnet (`http://100.124.164.50:8000`). The bearer token lives at `C:\Admin\Coolify\httpscoolify.nextechlabs.techsecurityapi-tokens\API KEY.txt` (that path is a **folder** containing `API KEY.txt`). A `GET /api/v1/deploy?uuid=...` (force optional) queues a rebuild from `main`.
+
+```powershell
+$tok = (Get-Content -LiteralPath "C:\Admin\Coolify\httpscoolify.nextechlabs.techsecurityapi-tokens\API KEY.txt" -Raw).Trim()
+Invoke-RestMethod -Method Get `
+  -Uri "http://100.124.164.50:8000/api/v1/deploy?uuid=t9jfrtoz8q7h9jfzigp6fchv" `
+  -Headers @{ Authorization = "Bearer $tok" }
 ```
 
 ---
@@ -125,6 +133,7 @@ npm run build  # writes dist/
 | `C:\Admin\Coolify\ssh key.txt` / `ssh key pub.pub` | Manual ed25519 keypair (passphrase‑protected) authorized on `76.13.240.144` |
 | `C:\Admin\Coolify\automation\coolify_automation` / `.pub` | Passphrase‑less ed25519 keypair for scripted SSH to `76.13.240.144` |
 | `C:\Admin\Coolify\Admin coolify login.txt` | Coolify dashboard email + password |
+| `C:\Admin\Coolify\httpscoolify.nextechlabs.techsecurityapi-tokens\API KEY.txt` | Coolify API bearer token (tailnet‑only API, see §3). Note: the parent is a folder, not a file. |
 | `C:\Admin\Hostinger\Hostinger API.txt` | Hostinger Public API bearer token (DNS, VPS, firewall) |
 
 > If you rotate any of these, also update what they point to (Coolify token rotation requires re‑creating in `Settings → Keys & Tokens`; SSH key rotation requires updating `/root/.ssh/authorized_keys` on the VPS).
