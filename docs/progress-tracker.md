@@ -70,7 +70,8 @@ _Move items here when started, move out when done._
 - ✅ Removed First Bite's external `links.live` (it had wrongly pointed at the Coolify admin host `coolify.nextechlabs.tech`); a mobile app has no website, so the showcase page is its web presence. Hero CTA now goes to Contact.
 - ✅ Corrected `docs/INFRA.md` Coolify section (dashboard `…​.tech` not `…​.org`; real app uuids; tailnet-only API; actual token path) and deployed to production via the Coolify API. **First Bite is live** at `nextechlabs.org/projects/first-bite` (+ `/privacy`, `/terms`) — verified: assets 200, routes + data present in the deployed bundle (deployment `v6mtdx4v064th44idd7lf73p`).
 - ✅ Swapped the First Bite showcase imagery for **seven real Android screenshots** (home, foods, meal plan, reaction log, protocol/Big-9, scanner, caregivers) in phone frames; removed the marketing photos + 910 KB icon. Redeployed and verified all seven serve 200 live (deployment `m11fwxavckmgah8p4z6nkhax`).
-- ⏳ Follow-up: First Bite app's `apps/mobile/lib/legal.js` still points to placeholder `firstbite.app/privacy|terms` — repoint to the hosted nextechlabs.org URLs (separate repo).
+- ✅ Repointed First Bite app `apps/mobile/lib/legal.js` to the hosted URLs (`nextechlabs.org/projects/first-bite/privacy` + `/terms`) and set `SUPPORT_EMAIL` → `help@nextechlabs.org` (separate repo; edit only, deploy via their EAS pipeline).
+- ✅ Added + deployed **account-deletion page** at `/projects/first-bite/delete-account` (App Store 5.1.1(v) / Play data-deletion requirement) — in-app delete steps, exact erasure scope, caregiver/subscription notes, email fallback. Added to legal nav tabs + showcase links. Verified live (route 200, present in deployed bundle; deployment `a4o8c8f11crsf9w12m92znc9`).
 
 ### 2026-05-06
 - ✅ Bootstrapped repo with the modular architecture skill (web-only profile, no Firebase/Hasura since no backend)
