@@ -489,13 +489,19 @@ export default function FirstBitePage() {
         <Container className="py-14 md:py-16">
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
-              <SectionLabel number="·" label="LEGAL" />
+              <SectionLabel number="·" label="LEGAL & SUPPORT" />
               <p className="mt-3 text-text-secondary max-w-xl">
                 A children's-health app collects sensitive data, so the policies are public and plain. These
                 are the URLs the app itself links to from its settings screen.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
+              <Link
+                to="/projects/first-bite/support"
+                className="label-mono px-4 py-2 rounded-full border border-border text-text-secondary hover:text-accent hover:border-[var(--color-accent-border)] transition-colors"
+              >
+                Support
+              </Link>
               <Link
                 to="/projects/first-bite/privacy"
                 className="label-mono px-4 py-2 rounded-full border border-border text-text-secondary hover:text-accent hover:border-[var(--color-accent-border)] transition-colors"

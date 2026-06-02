@@ -15,6 +15,7 @@ const PMTerms           = lazy(() => import('@/pages/projects/PasswordManagerTer
 const FBPrivacy         = lazy(() => import('@/pages/projects/FirstBitePrivacyPage'));
 const FBTerms           = lazy(() => import('@/pages/projects/FirstBiteTermsPage'));
 const FBDelete          = lazy(() => import('@/pages/projects/FirstBiteDeleteAccountPage'));
+const FBSupport         = lazy(() => import('@/pages/projects/FirstBiteSupportPage'));
 const CategoriesPage    = lazy(() => import('@/pages/CategoriesPage'));
 const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
@@ -112,6 +113,14 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <FBDelete />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/first-bite/support"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <FBSupport />
               </Suspense>
             }
           />
