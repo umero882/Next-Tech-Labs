@@ -64,8 +64,8 @@ const deepDives = [
     title: 'Introduce, then maintain — so tolerance actually sticks.',
     body:
       'Most trackers stop at "introduced." First Bite knows that allergens have to stay in the diet on a roughly weekly cadence to maintain tolerance. Each allergen runs a state machine — not started, in progress, introduced, maintaining, lapsed — with a maintenance streak that nudges you before the tolerance window closes.',
-    shot: ASSET('onboarding-track.jpg'),
-    alt: 'First Bite introduction and maintenance tracking',
+    shot: ASSET('plan.jpg'),
+    alt: 'First Bite allergen protocol — Big 9 progress and maintenance',
   },
   {
     label: '02 / SCANNER',
@@ -73,7 +73,7 @@ const deepDives = [
     title: 'Is this safe for my baby — right now?',
     body:
       'On-device OCR does the fast first pass; Claude does the reasoning. The scanner accounts for confirmed allergens, not-yet-introduced allergens, and active cooldowns. It flags risk — it never diagnoses. When confidence is low it says "can\'t confirm, check with a human" rather than guessing a false "safe."',
-    shot: ASSET('onboarding-hero.jpg'),
+    shot: ASSET('scan.jpg'),
     alt: 'First Bite AI safety scanner',
   },
   {
@@ -82,8 +82,8 @@ const deepDives = [
     title: 'Everyone who feeds the baby, on the same page.',
     body:
       'The co-parent, the grandparent, the nanny, the daycare — each invited with owner, caregiver, or view-only access. A caregiver logs a meal or flags a reaction and the primary parent sees it in real time. Offline edits queue and replay on reconnect.',
-    shot: ASSET('onboarding-share.jpg'),
-    alt: 'First Bite multi-caregiver sync',
+    shot: ASSET('caregivers.jpg'),
+    alt: 'First Bite multi-caregiver invites and clinical report',
   },
 ];
 
@@ -156,20 +156,13 @@ export default function FirstBitePage() {
                 <Badge variant="muted">iOS + Android · Store-ready</Badge>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="mt-7 flex items-center gap-4">
-                <img
-                  src={ASSET('icon.png')}
-                  alt="First Bite app icon"
-                  width={64}
-                  height={64}
-                  className="w-16 h-16 rounded-2xl border border-border shadow-lg shadow-black/40"
-                />
-                <span className="label-mono text-text-muted">FIRST BITE</span>
+              <motion.div variants={fadeUp} className="mt-7">
+                <span className="label-mono text-text-muted">FIRST BITE — BABY ALLERGY-FREE FOOD</span>
               </motion.div>
 
               <motion.h1
                 variants={fadeUp}
-                className="mt-6 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary leading-[1.05] tracking-tight"
+                className="mt-5 font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary leading-[1.05] tracking-tight"
               >
                 The allergy-prevention OS
                 <br />
@@ -217,7 +210,7 @@ export default function FirstBitePage() {
                       'radial-gradient(circle at 50% 40%, rgba(39,196,90,0.4) 0%, transparent 65%)',
                   }}
                 />
-                <ShotCard src={ASSET('onboarding-hero.jpg')} alt="First Bite onboarding" />
+                <PhoneFrame src={ASSET('home.jpg')} alt="First Bite home screen" />
               </div>
             </motion.div>
           </div>
@@ -242,9 +235,9 @@ export default function FirstBitePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
             {[
-              { src: ASSET('onboarding-hero.jpg'), cap: 'GUIDED INTRODUCTION' },
-              { src: ASSET('onboarding-track.jpg'), cap: 'TRACK & MAINTAIN' },
-              { src: ASSET('onboarding-share.jpg'), cap: 'STAY IN SYNC' },
+              { src: ASSET('foods.jpg'), cap: 'FOOD LIBRARY' },
+              { src: ASSET('meal-plan.jpg'), cap: 'MEAL PLANNER' },
+              { src: ASSET('log.jpg'), cap: 'REACTION LOG' },
             ].map((s, i) => (
               <motion.div
                 key={s.src}
@@ -254,7 +247,7 @@ export default function FirstBitePage() {
                 transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 className="flex flex-col items-center"
               >
-                <ShotCard src={s.src} alt={s.cap} />
+                <PhoneFrame src={s.src} alt={s.cap} />
                 <p className="mt-5 label-mono text-text-muted">{s.cap}</p>
               </motion.div>
             ))}
@@ -331,7 +324,7 @@ export default function FirstBitePage() {
                           : 'radial-gradient(circle at 50% 50%, rgba(127,77,243,0.4) 0%, transparent 65%)',
                     }}
                   />
-                  <ShotCard src={d.shot} alt={d.alt} />
+                  <PhoneFrame src={d.shot} alt={d.alt} />
                 </div>
               </div>
             </motion.div>
@@ -559,14 +552,14 @@ export default function FirstBitePage() {
   );
 }
 
-function ShotCard({ src, alt }) {
+function PhoneFrame({ src, alt }) {
   return (
-    <div className="relative rounded-[1.75rem] border border-border bg-bg-secondary p-2 shadow-2xl shadow-black/50">
+    <div className="relative mx-auto w-full max-w-[15rem] rounded-[2rem] border border-border bg-bg-secondary p-1.5 shadow-2xl shadow-black/50">
       <img
         src={src}
         alt={alt}
         loading="lazy"
-        className="block w-full rounded-[1.35rem] aspect-[3/4] object-cover object-center"
+        className="block w-full rounded-[1.6rem] aspect-[369/800] object-cover object-top"
       />
     </div>
   );
