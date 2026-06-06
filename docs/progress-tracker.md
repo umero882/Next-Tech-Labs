@@ -62,6 +62,9 @@ _Move items here when started, move out when done._
 
 ## Done log
 
+### 2026-06-07
+- ✅ Added + deployed a **Download section** to the Password Vault showcase (`/projects/password-manager`) — a live **Google Play** card linking to the production listing (`com.umero882.passwordvault`) and an **App Store "Coming soon"** card. Surfaced the Play link as the hero primary CTA ("Get it on Google Play"). Store marks are inline monochrome SVGs (lucide v1 dropped brand glyphs). Verified live (Play id + "Coming soon" + "GET THE APP" present in deployed `PasswordManagerPage-BDUSw4o2.js`; deployment `ivkgo9lj27e6sopjaus95ey9`).
+
 ### 2026-06-02
 - ✅ Added **First Bite** (`first-bite`, P-19) to `data/projects.js` — baby allergy-prevention Expo SDK 56 app, `mobile` category, `beta`, featured. Sourced from the repo at `C:\dev\Projects\Firs Bite` (PRD.md / README.md, 130 commits, store-readiness complete).
 - ✅ Wired conditional **"Visit live site"** outline button into `ProjectDetailPage` meta aside — renders only when `project.links.live` is set. First Bite live link: `https://coolify.nextechlabs.tech/`. (First project to populate `links`.)
