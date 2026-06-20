@@ -206,7 +206,7 @@ export default function FirstBitePage() {
                 <span className="label-mono px-2.5 py-1 rounded-md bg-bg-secondary border border-border text-text-secondary tabular">
                   P-19
                 </span>
-                <StatusDot status="beta" className="px-2.5 py-1 rounded-md bg-bg-secondary border border-border" />
+                <StatusDot status="live" className="px-2.5 py-1 rounded-md bg-bg-secondary border border-border" />
                 <Badge variant="muted">Live on the App Store · Android soon</Badge>
               </motion.div>
 
@@ -531,7 +531,7 @@ export default function FirstBitePage() {
                   ))}
                 </div>
                 <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5">
-                  <SpecRow k="Status" v={<StatusDot status="beta" />} />
+                  <SpecRow k="Status" v={<StatusDot status="live" />} />
                   <SpecRow k="Year" v="2026" mono />
                   <SpecRow k="Platforms" v="iOS 14+ / Android 9+" />
                   <SpecRow k="Author" v="Next Tech Labs" />

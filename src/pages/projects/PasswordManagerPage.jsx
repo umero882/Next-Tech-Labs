@@ -14,7 +14,6 @@ import {
   Cloud,
   Sparkles,
   Smartphone,
-  ExternalLink,
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -26,6 +25,7 @@ import { fadeUp, stagger } from '@/lib/motion';
 const SHOT = (n) => `/projects/password-manager/pw-${n}.jpeg`;
 
 const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.umero882.passwordvault';
+const APP_STORE_URL = 'https://apps.apple.com/us/app/passvault-pro/id6758148655';
 
 const heroShots = [SHOT(1), SHOT(6), SHOT(8)];
 
@@ -145,12 +145,16 @@ export default function PasswordManagerPage() {
         />
 
         <Container className="relative pt-12 md:pt-20 pb-12 md:pb-16">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 label-mono text-text-muted hover:text-accent transition-colors"
-          >
-            <ArrowLeft size={14} strokeWidth={1.75} /> All projects
-          </Link>
+          {/* Top bar — back link left, official store badges top-right (standard download slot) */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 label-mono text-text-muted hover:text-accent transition-colors"
+            >
+              <ArrowLeft size={14} strokeWidth={1.75} /> All projects
+            </Link>
+            <StoreBadges />
+          </div>
 
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Headline column */}
@@ -165,7 +169,7 @@ export default function PasswordManagerPage() {
                   P-07
                 </span>
                 <StatusDot status="live" className="px-2.5 py-1 rounded-md bg-bg-secondary border border-border" />
-                <Badge variant="muted">Google Play · Production</Badge>
+                <Badge variant="muted">App Store + Google Play · Live</Badge>
               </motion.div>
 
               <motion.h1
@@ -182,19 +186,18 @@ export default function PasswordManagerPage() {
                 className="mt-7 text-text-secondary text-lg md:text-xl leading-relaxed max-w-2xl"
               >
                 A focused, offline-first password manager — AES-256 encrypted, biometric-gated, with a
-                first-class secure-notes feature the rest of the category neglects. Shipped to Google Play
-                production after closed-testing review.
+                first-class secure-notes feature the rest of the category neglects. Live on the App Store
+                and Google Play production.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center gap-3">
-                <a href={PLAY_URL} target="_blank" rel="noreferrer noopener">
-                  <Button size="lg">
-                    <GooglePlayGlyph size={16} /> Get it on Google Play
-                  </Button>
-                </a>
-                <a href="#download">
+              <motion.div variants={fadeUp} className="mt-10">
+                <StoreBadges size="lg" />
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center gap-3">
+                <a href="#features">
                   <Button variant="outline" size="lg">
-                    Download
+                    See what's inside
                   </Button>
                 </a>
               </motion.div>
@@ -205,7 +208,7 @@ export default function PasswordManagerPage() {
               >
                 <Stat k="Encryption" v="AES-256" />
                 <Stat k="Network" v="Offline-first" />
-                <Stat k="Channel" v="Play Store" />
+                <Stat k="Channel" v="iOS + Android" />
               </motion.dl>
             </motion.div>
 
@@ -242,56 +245,13 @@ export default function PasswordManagerPage() {
               Download <span className="text-accent">Password Vault.</span>
             </h2>
             <p className="mt-5 text-text-secondary text-lg leading-relaxed">
-              Live on Google Play after passing production review. iOS is on the way — App Store
-              release coming soon.
+              Live on the App Store and Google Play — both after passing full production review.
+              Download free; upgrade to Premium in-app.
             </p>
           </div>
 
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {/* Google Play — live */}
-            <a
-              href={PLAY_URL}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="group relative flex items-center gap-4 rounded-2xl border border-border bg-bg-primary p-6 hover:border-[var(--color-accent-border)] transition-colors"
-            >
-              <div className="flex-none w-12 h-12 rounded-xl bg-bg-secondary border border-border inline-flex items-center justify-center text-text-primary">
-                <GooglePlayGlyph size={24} />
-              </div>
-              <div className="min-w-0">
-                <p className="label-mono text-text-muted">GET IT ON</p>
-                <p className="mt-0.5 font-display text-xl font-semibold text-text-primary tracking-tight">
-                  Google Play
-                </p>
-              </div>
-              <span className="ml-auto flex-none inline-flex items-center gap-2 self-start">
-                <StatusDot status="live" />
-                <ExternalLink
-                  size={16}
-                  strokeWidth={1.75}
-                  className="text-text-muted group-hover:text-accent transition-colors"
-                />
-              </span>
-            </a>
-
-            {/* App Store — coming soon */}
-            <div
-              aria-disabled="true"
-              className="relative flex items-center gap-4 rounded-2xl border border-dashed border-border bg-bg-primary/50 p-6 cursor-not-allowed select-none"
-            >
-              <div className="flex-none w-12 h-12 rounded-xl bg-bg-secondary border border-border inline-flex items-center justify-center text-text-muted">
-                <AppleGlyph size={24} />
-              </div>
-              <div className="min-w-0">
-                <p className="label-mono text-text-muted">DOWNLOAD ON THE</p>
-                <p className="mt-0.5 font-display text-xl font-semibold text-text-secondary tracking-tight">
-                  App Store
-                </p>
-              </div>
-              <Badge variant="muted" className="ml-auto flex-none self-start">
-                Coming soon
-              </Badge>
-            </div>
+          <div className="mt-12 flex justify-center">
+            <StoreBadges size="lg" className="justify-center" />
           </div>
         </Container>
       </section>
@@ -554,7 +514,7 @@ export default function PasswordManagerPage() {
                 <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5">
                   <SpecRow k="Status" v={<StatusDot status="live" />} />
                   <SpecRow k="Year" v="2025" mono />
-                  <SpecRow k="Channel" v="Google Play" />
+                  <SpecRow k="Channel" v="App Store + Google Play" />
                   <SpecRow k="Author" v="Next Tech Labs" />
                 </div>
               </div>
@@ -691,21 +651,32 @@ function SpecRow({ k, v, mono = false }) {
   );
 }
 
-/* Brand marks for the store download cards — monochrome (currentColor) to sit
-   inside the dark design system. lucide v1 dropped brand glyphs, so these are
-   inline SVGs used strictly as store badges, not general iconography. */
-function GooglePlayGlyph({ size = 24 }) {
+// Official Apple / Google store badges (both live). Google's PNG ships with
+// ~33% transparent padding, so it's rendered taller than the App Store SVG to
+// make the visible buttons line up at the same height.
+function StoreBadges({ size = 'md', className = '' }) {
+  const apple = size === 'lg' ? 'h-[52px]' : 'h-11';
+  const google = size === 'lg' ? 'h-[78px]' : 'h-[66px]';
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
-      <path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z" />
-    </svg>
-  );
-}
-
-function AppleGlyph({ size = 24 }) {
-  return (
-    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
-      <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
-    </svg>
+    <div className={`flex flex-wrap items-center gap-x-3 gap-y-2 ${className}`}>
+      <a
+        href={APP_STORE_URL}
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label="Download PassVault Pro on the App Store"
+        className="inline-block transition-opacity hover:opacity-80"
+      >
+        <img src="/badges/app-store.svg" alt="Download on the App Store" className={`${apple} w-auto`} />
+      </a>
+      <a
+        href={PLAY_URL}
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label="Get PassVault Pro on Google Play"
+        className="inline-block transition-opacity hover:opacity-80"
+      >
+        <img src="/badges/google-play.png" alt="Get it on Google Play" className={`${google} w-auto`} />
+      </a>
+    </div>
   );
 }

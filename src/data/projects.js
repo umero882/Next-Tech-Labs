@@ -187,12 +187,16 @@ export const projects = [
     status: 'live',
     year: 2025,
     client: 'Internal — NextechLabs',
-    stack: ['React Native', 'Expo', 'Encrypted Storage', 'Google Play'],
+    stack: ['React Native', 'Expo', 'Encrypted Storage', 'App Store', 'Google Play'],
     highlights: [
+      'Live on the App Store and Google Play production',
       'Notes-with-Reminder feature shipped in response to user feedback',
       'Passed Google Play production access review',
     ],
-    links: {},
+    links: {
+      appStore: 'https://apps.apple.com/us/app/passvault-pro/id6758148655',
+      playStore: 'https://play.google.com/store/apps/details?id=com.umero882.passwordvault',
+    },
     featured: true,
     cover: { type: 'image', image: '/projects/password-manager.png', size: 'contain' },
   },
@@ -204,7 +208,7 @@ export const projects = [
     description:
       'A native iOS + Android app that guides parents through evidence-based early-allergen introduction, keeps allergens safely in the diet to maintain tolerance, and answers one question in a tap: is this food, label, or menu safe for this baby right now? Built on an Expo SDK 56 monorepo with a fourteen-package domain layer, Firebase Auth and a Hasura GraphQL data graph, RevenueCat subscriptions, and Claude vision for the safety scanner.',
     category: 'mobile',
-    status: 'beta',
+    status: 'live',
     year: 2026,
     client: 'Internal — NextechLabs',
     stack: ['Expo SDK 56', 'React Native', 'Expo Router', 'NativeWind', 'Firebase Auth', 'Hasura GraphQL', 'Claude API', 'RevenueCat'],
@@ -218,7 +222,7 @@ export const projects = [
     ],
     links: { appStore: 'https://apps.apple.com/us/app/firstbite-baby-first-foods/id6775774829' },
     featured: true,
-    cover: { type: 'mesh', tokens: ['#27C45A', '#D29922', '#7F4DF3'] },
+    cover: { type: 'image', image: '/projects/first-bite-icon.png', size: 'contain' },
   },
 
   // ────────────────────────────────────────────────────────
