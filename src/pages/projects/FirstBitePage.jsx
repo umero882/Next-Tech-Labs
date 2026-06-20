@@ -24,6 +24,56 @@ import { fadeUp, stagger } from '@/lib/motion';
 
 const ASSET = (n) => `/projects/first-bite/${n}`;
 
+const APP_STORE_URL = 'https://apps.apple.com/us/app/firstbite-baby-first-foods/id6775774829';
+// Android listing not live yet — set this once the Play Store URL exists.
+const PLAY_STORE_URL = null;
+
+// Official Apple / Google store badges. Google's PNG ships with ~33% transparent
+// padding, so it's rendered taller than the App Store SVG to make the visible
+// buttons line up at the same height.
+function StoreBadges({ size = 'md', className = '' }) {
+  const apple = size === 'lg' ? 'h-[52px]' : 'h-11';
+  const google = size === 'lg' ? 'h-[78px]' : 'h-[66px]';
+  return (
+    <div className={`flex flex-wrap items-center gap-x-3 gap-y-2 ${className}`}>
+      <a
+        href={APP_STORE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Download First Bite on the App Store"
+        className="inline-block transition-opacity hover:opacity-80"
+      >
+        <img src="/badges/app-store.svg" alt="Download on the App Store" className={`${apple} w-auto`} />
+      </a>
+
+      {PLAY_STORE_URL ? (
+        <a
+          href={PLAY_STORE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Get First Bite on Google Play"
+          className="inline-block transition-opacity hover:opacity-80"
+        >
+          <img src="/badges/google-play.png" alt="Get it on Google Play" className={`${google} w-auto`} />
+        </a>
+      ) : (
+        <div className="relative inline-block" aria-label="First Bite on Google Play — coming soon">
+          <img
+            src="/badges/google-play.png"
+            alt="Get it on Google Play — coming soon"
+            className={`${google} w-auto opacity-30 grayscale`}
+          />
+          <span className="absolute inset-0 flex items-center justify-center">
+            <span className="rounded-full bg-bg-primary/85 border border-border px-2.5 py-0.5 label-mono text-[10px] text-text-secondary whitespace-nowrap">
+              Coming soon
+            </span>
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const features = [
   {
     icon: HeartPulse,
@@ -138,12 +188,16 @@ export default function FirstBitePage() {
         />
 
         <Container className="relative pt-12 md:pt-20 pb-12 md:pb-16">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 label-mono text-text-muted hover:text-accent transition-colors"
-          >
-            <ArrowLeft size={14} strokeWidth={1.75} /> All projects
-          </Link>
+          {/* Top bar — back link left, official store badges top-right (standard download slot) */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 label-mono text-text-muted hover:text-accent transition-colors"
+            >
+              <ArrowLeft size={14} strokeWidth={1.75} /> All projects
+            </Link>
+            <StoreBadges />
+          </div>
 
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Headline column */}
@@ -153,7 +207,7 @@ export default function FirstBitePage() {
                   P-19
                 </span>
                 <StatusDot status="beta" className="px-2.5 py-1 rounded-md bg-bg-secondary border border-border" />
-                <Badge variant="muted">iOS + Android · Store-ready</Badge>
+                <Badge variant="muted">Live on the App Store · Android soon</Badge>
               </motion.div>
 
               <motion.div variants={fadeUp} className="mt-7">
@@ -179,7 +233,11 @@ export default function FirstBitePage() {
                 baby — right now.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center gap-3">
+              <motion.div variants={fadeUp} className="mt-10">
+                <StoreBadges size="lg" />
+              </motion.div>
+
+              <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center gap-3">
                 <Link to="/contact">
                   <Button size="lg">
                     Build something like this <ArrowRight size={14} strokeWidth={2} />
@@ -546,17 +604,23 @@ export default function FirstBitePage() {
             First Bite pairs a real product with real guardrails — evidence-based content, an AI layer that
             refuses to over-claim, and a store-ready Expo build pipeline. We build the same way for clients.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
-            <Link to="/contact">
-              <Button size="lg">
-                Start a project <ArrowRight size={14} strokeWidth={2} />
-              </Button>
-            </Link>
-            <Link to="/projects">
-              <Button variant="outline" size="lg">
-                See more work
-              </Button>
-            </Link>
+          <div className="mt-10 flex flex-col items-center gap-6">
+            <div>
+              <p className="label-mono text-text-muted mb-3">GET THE APP</p>
+              <StoreBadges size="lg" className="justify-center" />
+            </div>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <Link to="/contact">
+                <Button variant="outline" size="lg">
+                  Start a project <ArrowRight size={14} strokeWidth={2} />
+                </Button>
+              </Link>
+              <Link to="/projects">
+                <Button variant="outline" size="lg">
+                  See more work
+                </Button>
+              </Link>
+            </div>
           </div>
         </Container>
       </section>
