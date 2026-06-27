@@ -25,8 +25,7 @@ import { fadeUp, stagger } from '@/lib/motion';
 const ASSET = (n) => `/projects/first-bite/${n}`;
 
 const APP_STORE_URL = 'https://apps.apple.com/us/app/firstbite-baby-first-foods/id6775774829';
-// Android listing not live yet — set this once the Play Store URL exists.
-const PLAY_STORE_URL = null;
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.firstbite.app';
 
 // Official Apple / Google store badges. Google's PNG ships with ~33% transparent
 // padding, so it's rendered taller than the App Store SVG to make the visible
@@ -207,7 +206,7 @@ export default function FirstBitePage() {
                   P-19
                 </span>
                 <StatusDot status="live" className="px-2.5 py-1 rounded-md bg-bg-secondary border border-border" />
-                <Badge variant="muted">Live on the App Store · Android soon</Badge>
+                <Badge variant="muted">Live on the App Store + Google Play</Badge>
               </motion.div>
 
               <motion.div variants={fadeUp} className="mt-7">
