@@ -62,6 +62,9 @@ _Move items here when started, move out when done._
 
 ## Done log
 
+### 2026-06-27
+- ✅ **First Bite is live on Google Play production** (Android passed Google Play production review). Wired the live **Google Play** badge on the showcase page (`pages/projects/FirstBitePage.jsx` — set `PLAY_STORE_URL` → `com.firstbite.app`, retiring the grayscale "Coming soon" fallback), flipped the hero status badge ("Live on the App Store · Android soon" → "Live on the App Store + Google Play"), and updated `data/projects.js` (highlight copy + `links.playStore`). Deployed via Coolify; verified live (deployed `FirstBitePage-DzI_LEym.js` contains the Play URL + new badge, no stale "Android soon"/"Coming soon"; commit `8af8cbb`).
+
 ### 2026-06-07
 - ✅ Added + deployed a **Download section** to the Password Vault showcase (`/projects/password-manager`) — a live **Google Play** card linking to the production listing (`com.umero882.passwordvault`) and an **App Store "Coming soon"** card. Surfaced the Play link as the hero primary CTA ("Get it on Google Play"). Store marks are inline monochrome SVGs (lucide v1 dropped brand glyphs). Verified live (Play id + "Coming soon" + "GET THE APP" present in deployed `PasswordManagerPage-BDUSw4o2.js`; deployment `ivkgo9lj27e6sopjaus95ey9`).
 
