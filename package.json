@@ -10,7 +10,7 @@
     "prebuild": "node scripts/generate-sitemap.mjs",
     "build": "vite build",
     "preview": "vite preview --host",
-    "test": "node --test src/",
+    "test": "node --test",
     "verify": "node scripts/verify-routes.mjs"
   },
   "dependencies": {
