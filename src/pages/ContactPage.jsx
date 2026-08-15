@@ -55,7 +55,7 @@ export default function ContactPage() {
             </p>
 
             <div className="mt-8">
-              <ContactForm />
+              <ContactForm variant="studio" />
             </div>
           </motion.div>
 

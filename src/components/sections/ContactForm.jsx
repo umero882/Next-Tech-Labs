@@ -1,10 +1,14 @@
-import { useState, useId } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { company } from '@/data/company';
+import { resolveSupport } from '@/lib/nav';
 import { fadeUp } from '@/lib/motion';
 import { cn } from '@/lib/cn';
+
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+const SITE_HOST = 'nextechlabs.org';
 
 const projectTypes = [
   { value: '', label: 'Select a category…', disabled: true },
@@ -33,22 +37,48 @@ const timelines = [
   { value: '6m+',      label: '6+ months out' },
 ];
 
-// Configure VITE_CONTACT_ENDPOINT in .env.local to enable real submissions
-// (e.g. Formspree, Web3Forms, Formsubmit). Without it, falls back to mailto.
-const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT;
+/**
+ * Topics for a product's own contact form.
+ *
+ * Bug reports and billing only make sense for something shipped, so they are
+ * added when the project is live. Budget and timeline — the studio's questions —
+ * are the wrong thing to ask a parent asking whether a food is safe.
+ */
+function productTopics(project) {
+  const shipped = project?.status === 'live';
+  return [
+    { value: '', label: 'What is this about?…', disabled: true },
+    ...(shipped
+      ? [
+          { value: 'bug', label: 'Something is broken' },
+          { value: 'account', label: 'Account & billing' },
+        ]
+      : []),
+    { value: 'feedback', label: 'Feedback & feature request' },
+    { value: 'press', label: 'Press & partnerships' },
+    { value: 'other', label: 'Something else' },
+  ];
+}
 
-function validate({ name, email, projectType, message }) {
+function validate({ name, email, projectType, message }, variant) {
   const errors = {};
   if (!name.trim()) errors.name = 'Tell us what to call you.';
   if (!email.trim()) errors.email = 'We need an email to reply to.';
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'That doesn’t look like a valid email.';
-  if (!projectType) errors.projectType = 'Pick the category that best fits.';
+  if (!projectType) {
+    errors.projectType = variant === 'product' ? 'Pick the closest topic.' : 'Pick the category that best fits.';
+  }
   if (!message.trim()) errors.message = 'A paragraph or two is plenty.';
   else if (message.trim().length < 20) errors.message = 'Give us a bit more — at least 20 characters.';
   return errors;
 }
 
-export function ContactForm() {
+export function ContactForm({ variant = 'studio', project = null }) {
+  const isProduct = variant === 'product';
+  const { email: recipient, formKey } = isProduct
+    ? resolveSupport(project)
+    : { email: company.channels.email, formKey: resolveSupport(null).formKey };
+
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -72,7 +102,7 @@ export function ContactForm() {
     e.preventDefault();
 
     if (form._trap) return; // bot
-    const v = validate(form);
+    const v = validate(form, variant);
     if (Object.keys(v).length) {
       setErrors(v);
       const first = document.getElementById(`cf-${Object.keys(v)[0]}`);
@@ -82,20 +112,32 @@ export function ContactForm() {
 
     setStatus('sending');
 
-    if (ENDPOINT) {
+    const sourcePath = isProduct ? `/projects/${project.id}/contact` : '/contact';
+    const label = isProduct ? project.name : 'Studio';
+    const subject = isProduct
+      ? `[${project.name}] ${form.projectType || 'inquiry'} — ${form.name}`
+      : `[${form.projectType || 'inquiry'}] ${form.name} — ${form.company || 'personal'}`;
+
+    if (formKey) {
       try {
-        const res = await fetch(ENDPOINT, {
+        // Web3Forms binds an access key to a destination inbox, which is how a
+        // static site routes each product's mail somewhere different. Extra
+        // fields are echoed into the email body.
+        const res = await fetch(WEB3FORMS_ENDPOINT, {
           method: 'POST',
           headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name: form.name,
+            access_key: formKey,
+            subject,
+            from_name: form.name,
             email: form.email,
-            company: form.company,
-            project_type: form.projectType,
-            budget: form.budget,
-            timeline: form.timeline,
             message: form.message,
-            source: 'nexttechlabs.com/contact',
+            product: label,
+            topic: form.projectType,
+            ...(isProduct
+              ? {}
+              : { company: form.company, budget: form.budget, timeline: form.timeline }),
+            source: `${SITE_HOST}${sourcePath}`,
           }),
         });
         if (!res.ok) throw new Error(`status ${res.status}`);
@@ -115,21 +157,21 @@ export function ContactForm() {
         setStatus('error');
       }
     } else {
-      // Mailto fallback — safe for static deploys
-      const subject = `[${form.projectType || 'inquiry'}] ${form.name} — ${form.company || 'personal'}`;
+      // No key configured — compose the message in the visitor's mail client
+      // instead, addressed to whichever inbox this form belongs to.
       const body = [
         `Name: ${form.name}`,
         `Email: ${form.email}`,
-        form.company && `Company: ${form.company}`,
-        `Project type: ${form.projectType}`,
-        form.budget && `Budget: ${form.budget}`,
-        form.timeline && `Timeline: ${form.timeline}`,
+        isProduct ? `Product: ${project.name}` : form.company && `Company: ${form.company}`,
+        isProduct ? `Topic: ${form.projectType}` : `Project type: ${form.projectType}`,
+        !isProduct && form.budget && `Budget: ${form.budget}`,
+        !isProduct && form.timeline && `Timeline: ${form.timeline}`,
         '',
         form.message,
       ]
         .filter(Boolean)
         .join('\n');
-      window.location.href = `mailto:${company.channels.email}?subject=${encodeURIComponent(
+      window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(
         subject,
       )}&body=${encodeURIComponent(body)}`;
       setStatus('mailto');
@@ -209,53 +251,61 @@ export function ContactForm() {
         />
       </div>
 
-      <Field
-        id="company"
-        label="Company"
-        hint="Optional"
-        value={form.company}
-        onChange={(v) => set('company', v)}
-        placeholder="Your org or brand"
-        autoComplete="organization"
-      />
+      {!isProduct && (
+        <Field
+          id="company"
+          label="Company"
+          hint="Optional"
+          value={form.company}
+          onChange={(v) => set('company', v)}
+          placeholder="Your org or brand"
+          autoComplete="organization"
+        />
+      )}
 
       <SelectField
         id="projectType"
-        label="Project type"
+        label={isProduct ? 'Topic' : 'Project type'}
         required
         value={form.projectType}
         onChange={(v) => set('projectType', v)}
-        options={projectTypes}
+        options={isProduct ? productTopics(project) : projectTypes}
         error={errors.projectType}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <SelectField
-          id="budget"
-          label="Budget"
-          hint="Optional"
-          value={form.budget}
-          onChange={(v) => set('budget', v)}
-          options={budgets}
-        />
-        <SelectField
-          id="timeline"
-          label="Timeline"
-          hint="Optional"
-          value={form.timeline}
-          onChange={(v) => set('timeline', v)}
-          options={timelines}
-        />
-      </div>
+      {!isProduct && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <SelectField
+            id="budget"
+            label="Budget"
+            hint="Optional"
+            value={form.budget}
+            onChange={(v) => set('budget', v)}
+            options={budgets}
+          />
+          <SelectField
+            id="timeline"
+            label="Timeline"
+            hint="Optional"
+            value={form.timeline}
+            onChange={(v) => set('timeline', v)}
+            options={timelines}
+          />
+        </div>
+      )}
 
       <TextareaField
         id="message"
-        label="What are you trying to build?"
+        label={isProduct ? 'What’s going on?' : 'What are you trying to build?'}
         required
         value={form.message}
         onChange={(v) => set('message', v)}
         error={errors.message}
-        placeholder="A paragraph is plenty. The clearer the goal, the better the first reply."
+        placeholder={
+          isProduct
+            ? 'What happened, what you expected, and the device you’re on if it’s a bug.'
+            : 'A paragraph is plenty. The clearer the goal, the better the first reply.'
+        }
         rows={6}
       />
 
@@ -284,8 +334,8 @@ export function ContactForm() {
           <AlertCircle size={16} className="mt-0.5 text-[var(--color-error)] flex-none" />
           <p className="text-sm text-text-secondary leading-relaxed">
             Something went wrong sending the message. Try again, or email us directly at{' '}
-            <a href={`mailto:${company.channels.email}`} className="text-accent hover:underline">
-              {company.channels.email}
+            <a href={`mailto:${recipient}`} className="text-accent hover:underline">
+              {recipient}
             </a>
             .
           </p>
