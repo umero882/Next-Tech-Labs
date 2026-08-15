@@ -16,12 +16,26 @@ const here = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(here, '../dist');
 const sitemapFile = resolve(here, '../public/sitemap.xml');
 
-/** Route patterns that must survive into the shipped JS. */
+/**
+ * Route patterns that must survive into the shipped JS.
+ *
+ * Checked delimiter-bounded, not by bare substring: 'projects/first-bite/blog'
+ * is a prefix of 'projects/first-bite/blog/:slug', and 'projects/:id' is a
+ * prefix of 'projects/:id/blog', so a substring check would keep passing after
+ * the route it names was deleted -- exactly the regression this file exists to
+ * catch.
+ */
 const ROUTE_EXPECTATIONS = [
   'projects/:id/blog',
   'projects/first-bite/blog',
   'projects/:id',
 ];
+
+/** True when `route` appears in `js` as a complete quoted string literal. */
+function routeInBundle(js, route) {
+  const escaped = route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`["'\`]${escaped}["'\`]`).test(js);
+}
 
 /** Paths the sitemap must list. */
 const SITEMAP_REQUIRED = [
@@ -51,7 +65,7 @@ const js = readdirSync(assetsDir)
 
 console.log(`bundle: ${readdirSync(assetsDir).filter((f) => f.endsWith('.js')).length} JS chunk(s)`);
 for (const route of ROUTE_EXPECTATIONS) {
-  check(js.includes(route), `route in bundle: ${route}`);
+  check(routeInBundle(js, route), `route in bundle: ${route}`);
 }
 
 // ── sitemap ─────────────────────────────────────────────────
