@@ -23,7 +23,7 @@ import { StatusDot } from '@/components/ui/StatusDot';
 import { StoreBadges } from '@/components/ui/StoreBadges';
 import { useSeo } from '@/hooks/useSeo';
 import { posts } from '@/data/blog';
-import { formatPostDate, postPath, sortPostsByDate } from '@/lib/blog';
+import { BLOG_BASE, formatPostDate, postPath, sortPostsByDate } from '@/lib/blog';
 import { buildBreadcrumbJsonLd, buildMobileAppJsonLd } from '@/lib/seo';
 import { fadeUp, stagger } from '@/lib/motion';
 
@@ -557,7 +557,7 @@ export default function FirstBitePage() {
                 </h2>
               </div>
               <Link
-                to="/blog"
+                to={BLOG_BASE}
                 className="inline-flex items-center gap-2 label-mono text-text-secondary hover:text-accent transition-colors"
               >
                 All articles <ArrowRight size={14} strokeWidth={2} />

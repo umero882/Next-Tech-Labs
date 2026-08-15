@@ -2,9 +2,22 @@
  * Blog selectors. Pure — no React, no side effects.
  */
 
+/**
+ * The blog lives under its project, not at the site root.
+ *
+ * Next Tech Labs ships many products; these articles are First Bite's, so they
+ * belong beneath First Bite. `/blog` is reserved for the studio's own writing and
+ * 301s here for now (see nginx.conf), which is also what keeps the URLs that were
+ * already indexed at /blog/<slug> from going dead.
+ *
+ * When a second product starts publishing, this becomes a per-project base
+ * derived from the post's `app` field rather than a constant.
+ */
+export const BLOG_BASE = '/projects/first-bite/blog';
+
 /** Site-relative path for a post slug. */
 export function postPath(slug) {
-  return `/blog/${slug}`;
+  return `${BLOG_BASE}/${slug}`;
 }
 
 /** Newest first. Does not mutate the input. */

@@ -28,7 +28,7 @@ const today = new Date().toISOString().slice(0, 10);
 const entries = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
   { path: '/projects', changefreq: 'weekly', priority: '0.9' },
-  { path: '/blog', changefreq: 'weekly', priority: '0.9' },
+  { path: '/projects/first-bite/blog', changefreq: 'weekly', priority: '0.9' },
   { path: '/services', changefreq: 'monthly', priority: '0.8' },
   { path: '/categories', changefreq: 'monthly', priority: '0.6' },
   { path: '/tech', changefreq: 'monthly', priority: '0.6' },
@@ -57,7 +57,7 @@ for (const project of projects) {
 
 for (const post of posts) {
   entries.push({
-    path: `/blog/${post.slug}`,
+    path: `/projects/first-bite/blog/${post.slug}`,
     changefreq: 'monthly',
     priority: '0.8',
     lastmod: post.updated || post.published,

@@ -86,7 +86,7 @@ export default function Post() {
         <li>
           <Strong>Peanut</Strong> — thinned peanut butter, peanut puffs, or peanut flour stirred into
           a familiar puree. Never whole nuts.{' '}
-          <A href="/blog/when-to-introduce-peanut-butter-to-baby">Full peanut walkthrough here.</A>
+          <A href="/projects/first-bite/blog/when-to-introduce-peanut-butter-to-baby">Full peanut walkthrough here.</A>
         </li>
         <li>
           <Strong>Egg</Strong> — thoroughly cooked. Scrambled, hard-boiled and mashed, or baked into

@@ -199,7 +199,7 @@ export default function Post() {
         the hour, is usually contact irritation rather than an allergy. If you are not sure, stop the
         food and ask your pediatrician before offering it again. More detail on telling those apart is
         in{' '}
-        <A href="/blog/signs-of-food-allergy-in-babies">
+        <A href="/projects/first-bite/blog/signs-of-food-allergy-in-babies">
           signs of a food allergy reaction in babies
         </A>
         .

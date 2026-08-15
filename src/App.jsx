@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate, useParams } from 'react-router-dom';
+import { BLOG_BASE } from '@/lib/blog';
 import { RootLayout } from '@/components/layout/RootLayout';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -32,6 +33,19 @@ function PageFallback() {
       <span className="label-mono text-text-muted">Loading…</span>
     </div>
   );
+}
+
+/**
+ * /blog/<slug> → the same article under First Bite.
+ *
+ * Those five URLs are published and indexed, so they keep working. `Navigate`
+ * cannot interpolate a param on its own, hence the component. Delete this once
+ * /blog carries the studio's own posts and the redirect would start shadowing
+ * them.
+ */
+function LegacyPostRedirect() {
+  const { slug } = useParams();
+  return <Navigate to={`${BLOG_BASE}/${slug}`} replace />;
 }
 
 function NotFound() {
@@ -126,6 +140,33 @@ export default function App() {
               </Suspense>
             }
           />
+          {/*
+            The blog belongs to First Bite, so it lives under First Bite. These
+            two sit above `projects/:id` because that dynamic route would
+            otherwise swallow them.
+
+            /blog stays reserved for Next Tech Labs' own writing and redirects
+            here in the meantime, which is also what keeps the five URLs already
+            indexed at /blog/<slug> alive. nginx serves the real 301s (see
+            nginx.conf); these client routes cover in-app navigation and
+            `npm run dev`, where nginx is not in the loop.
+          */}
+          <Route
+            path="projects/first-bite/blog"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <BlogPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/first-bite/blog/:slug"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <BlogPostPage />
+              </Suspense>
+            }
+          />
           <Route
             path="projects/:id"
             element={
@@ -134,22 +175,8 @@ export default function App() {
               </Suspense>
             }
           />
-          <Route
-            path="blog"
-            element={
-              <Suspense fallback={<PageFallback />}>
-                <BlogPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="blog/:slug"
-            element={
-              <Suspense fallback={<PageFallback />}>
-                <BlogPostPage />
-              </Suspense>
-            }
-          />
+          <Route path="blog" element={<Navigate to={BLOG_BASE} replace />} />
+          <Route path="blog/:slug" element={<LegacyPostRedirect />} />
           <Route
             path="categories"
             element={

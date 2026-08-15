@@ -11,7 +11,7 @@ import { DownloadCta } from '@/components/blog/DownloadCta';
 import { useSeo } from '@/hooks/useSeo';
 import { posts } from '@/data/blog';
 import { projects } from '@/data/projects';
-import { postTopics, sortPostsByDate } from '@/lib/blog';
+import { BLOG_BASE, postTopics, sortPostsByDate } from '@/lib/blog';
 import { buildBlogJsonLd, buildBreadcrumbJsonLd, buildMobileAppJsonLd } from '@/lib/seo';
 import { fadeUp, stagger } from '@/lib/motion';
 
@@ -28,7 +28,7 @@ export default function BlogPage() {
   useSeo({
     title: `${TITLE} | Next Tech Labs`,
     description: DESCRIPTION,
-    path: '/blog',
+    path: BLOG_BASE,
     image: app?.cover?.image,
     keywords: [
       'baby allergen introduction',
@@ -39,14 +39,15 @@ export default function BlogPage() {
     ],
     jsonLd: [
       buildBlogJsonLd({
-        path: '/blog',
+        path: BLOG_BASE,
         name: TITLE,
         description: DESCRIPTION,
         posts: ordered,
       }),
       buildBreadcrumbJsonLd([
         { name: 'Home', path: '/' },
-        { name: 'Blog', path: '/blog' },
+        { name: 'First Bite', path: '/projects/first-bite' },
+      { name: 'Blog', path: BLOG_BASE },
       ]),
       app &&
         buildMobileAppJsonLd({

@@ -27,7 +27,7 @@ export function Footer() {
               { label: 'Products', href: '/projects' },
               { label: 'Categories', href: '/categories' },
               { label: 'Tech', href: '/tech' },
-              { label: 'Blog', href: '/blog' },
+              { label: 'Blog', href: '/projects/first-bite/blog' },
               { label: 'Contact', href: '/contact' },
               { label: 'About', href: '/about' },
             ]}

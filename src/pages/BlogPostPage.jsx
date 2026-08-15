@@ -17,7 +17,7 @@ import {
 } from '@/components/blog/articleBlocks';
 import { useSeo } from '@/hooks/useSeo';
 import { posts } from '@/data/blog';
-import { findPost, postPath, relatedPosts } from '@/lib/blog';
+import { BLOG_BASE, findPost, postPath, relatedPosts } from '@/lib/blog';
 import {
   buildArticleJsonLd,
   buildBreadcrumbJsonLd,
@@ -76,7 +76,7 @@ export default function BlogPostPage() {
         />
         <Container className="relative pt-10 md:pt-14 pb-12">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 label-mono text-text-muted">
-            <Link to="/blog" className="hover:text-accent transition-colors">
+            <Link to={BLOG_BASE} className="hover:text-accent transition-colors">
               Blog
             </Link>
             <ChevronRight size={12} strokeWidth={1.75} />
@@ -187,7 +187,8 @@ function PostSeo({ post, app, path }) {
     buildFaqJsonLd(post.faqs),
     buildBreadcrumbJsonLd([
       { name: 'Home', path: '/' },
-      { name: 'Blog', path: '/blog' },
+      { name: 'First Bite', path: '/projects/first-bite' },
+      { name: 'Blog', path: BLOG_BASE },
       { name: post.headline, path },
     ]),
   ];
@@ -224,7 +225,7 @@ function PostNotFound() {
   useSeo({
     title: 'Article not found | Next Tech Labs',
     description: 'That article does not exist. Browse the First Bite blog instead.',
-    path: '/blog',
+    path: BLOG_BASE,
     noindex: true,
   });
 
@@ -235,7 +236,7 @@ function PostNotFound() {
         That article doesn&rsquo;t exist.
       </h1>
       <p className="mt-4 text-text-muted">It may have been renamed, or never published.</p>
-      <Link to="/blog" className="inline-block mt-8">
+      <Link to={BLOG_BASE} className="inline-block mt-8">
         <Button variant="outline">
           <ArrowLeft size={14} /> All articles
         </Button>

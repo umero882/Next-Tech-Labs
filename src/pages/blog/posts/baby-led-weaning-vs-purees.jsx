@@ -93,9 +93,9 @@ export default function Post() {
       <P>
         What does not change with method: one new allergen at a time, three to five days between
         them, mornings at home. The{' '}
-        <A href="/blog/baby-allergen-introduction-schedule">Big 9 introduction schedule</A> applies
+        <A href="/projects/first-bite/blog/baby-allergen-introduction-schedule">Big 9 introduction schedule</A> applies
         identically to both, and the{' '}
-        <A href="/blog/when-to-introduce-peanut-butter-to-baby">peanut walkthrough</A> lists safe
+        <A href="/projects/first-bite/blog/when-to-introduce-peanut-butter-to-baby">peanut walkthrough</A> lists safe
         forms for spoon and hand.
       </P>
 
@@ -133,7 +133,7 @@ export default function Post() {
       </UL>
       <P>
         Whichever method you pick, the first month is described in more detail in{' '}
-        <A href="/blog/starting-solids-first-foods-for-baby">starting solids: the first month</A>.
+        <A href="/projects/first-bite/blog/starting-solids-first-foods-for-baby">starting solids: the first month</A>.
       </P>
     </>
   );

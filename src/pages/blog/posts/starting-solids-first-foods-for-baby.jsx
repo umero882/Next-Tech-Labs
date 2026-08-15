@@ -82,14 +82,14 @@ export default function Post() {
       <P>
         Add a second and third food, one at a time. This is a reasonable point to bring in the first
         allergens if solids are going smoothly — see the{' '}
-        <A href="/blog/baby-allergen-introduction-schedule">Big 9 introduction schedule</A>.
+        <A href="/projects/first-bite/blog/baby-allergen-introduction-schedule">Big 9 introduction schedule</A>.
       </P>
 
       <H3>Week 3 — twice a day</H3>
       <P>
         Move to two small meals. Start varying texture — slightly thicker purees, mashed rather than
         blended, or soft finger foods if you are leaning toward{' '}
-        <A href="/blog/baby-led-weaning-vs-purees">baby-led weaning</A>.
+        <A href="/projects/first-bite/blog/baby-led-weaning-vs-purees">baby-led weaning</A>.
       </P>
 
       <H3>Week 4 — combinations</H3>
@@ -156,7 +156,7 @@ export default function Post() {
           trouble breathing, swelling of the lips or tongue, repeated vomiting, or a suddenly pale and
           floppy baby means <Strong>call your local emergency number immediately</Strong>. Details on
           telling a reaction from an irritation are in{' '}
-          <A href="/blog/signs-of-food-allergy-in-babies">signs of a food allergy in babies</A>.
+          <A href="/projects/first-bite/blog/signs-of-food-allergy-in-babies">signs of a food allergy in babies</A>.
         </p>
       </Callout>
     </>
