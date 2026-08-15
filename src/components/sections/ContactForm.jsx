@@ -138,6 +138,11 @@ export function ContactForm({ variant = 'studio', project = null }) {
           headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify({
             access_key: formKey,
+            // Web3Forms' own server-side honeypot field. Its name is fixed by
+            // Web3Forms, not us -- a bot posting straight to their endpoint
+            // (skipping this React form entirely, since the access key ships
+            // in the client bundle) still trips it.
+            botcheck: form._trap,
             subject,
             from_name: form.name,
             email: form.email,
@@ -150,7 +155,12 @@ export function ContactForm({ variant = 'studio', project = null }) {
             source: `${SITE_HOST}${sourcePath}`,
           }),
         });
-        if (!res.ok) throw new Error(`status ${res.status}`);
+        // Web3Forms can answer HTTP 200 with `{ success: false }` for a
+        // rejected submission -- an ok status alone does not mean delivered.
+        // Fail closed on a missing/unparseable body too: the error card
+        // points the visitor at a direct email, which is the safe direction.
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok || result.success !== true) throw new Error(result.message || `status ${res.status}`);
         setStatus('success');
         setForm((f) => ({
           ...f,
