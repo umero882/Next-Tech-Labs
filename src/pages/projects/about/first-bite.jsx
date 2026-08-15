@@ -104,7 +104,7 @@ export default function FirstBiteAboutPage({ project }) {
                   <Icon size={18} strokeWidth={1.75} />
                 </span>
                 <div>
-                  <h3 className="font-display text-xl font-semibold text-text-primary">{title}</h3>
+                  <h2 className="font-display text-xl font-semibold text-text-primary">{title}</h2>
                   <p className="mt-2 text-text-secondary leading-relaxed">{body}</p>
                 </div>
               </div>
