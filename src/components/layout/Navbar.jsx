@@ -11,6 +11,7 @@ const links = [
   { to: '/projects',   label: 'Products' },
   { to: '/categories', label: 'Categories' },
   { to: '/tech',       label: 'Tech' },
+  { to: '/blog',       label: 'Blog' },
   { to: '/contact',    label: 'Contact' },
   { to: '/about',      label: 'About' },
 ];

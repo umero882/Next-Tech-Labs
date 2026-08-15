@@ -20,6 +20,11 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { StatusDot } from '@/components/ui/StatusDot';
+import { StoreBadges } from '@/components/ui/StoreBadges';
+import { useSeo } from '@/hooks/useSeo';
+import { posts } from '@/data/blog';
+import { formatPostDate, postPath, sortPostsByDate } from '@/lib/blog';
+import { buildBreadcrumbJsonLd, buildMobileAppJsonLd } from '@/lib/seo';
 import { fadeUp, stagger } from '@/lib/motion';
 
 const ASSET = (n) => `/projects/first-bite/${n}`;
@@ -27,49 +32,15 @@ const ASSET = (n) => `/projects/first-bite/${n}`;
 const APP_STORE_URL = 'https://apps.apple.com/us/app/firstbite-baby-first-foods/id6775774829';
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.firstbite.app';
 
-// Official Apple / Google store badges. Google's PNG ships with ~33% transparent
-// padding, so it's rendered taller than the App Store SVG to make the visible
-// buttons line up at the same height.
-function StoreBadges({ size = 'md', className = '' }) {
-  const apple = size === 'lg' ? 'h-[52px]' : 'h-11';
-  const google = size === 'lg' ? 'h-[78px]' : 'h-[66px]';
+/** Store badges pre-bound to the First Bite listings. */
+function FirstBiteBadges(props) {
   return (
-    <div className={`flex flex-wrap items-center gap-x-3 gap-y-2 ${className}`}>
-      <a
-        href={APP_STORE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Download First Bite on the App Store"
-        className="inline-block transition-opacity hover:opacity-80"
-      >
-        <img src="/badges/app-store.svg" alt="Download on the App Store" className={`${apple} w-auto`} />
-      </a>
-
-      {PLAY_STORE_URL ? (
-        <a
-          href={PLAY_STORE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Get First Bite on Google Play"
-          className="inline-block transition-opacity hover:opacity-80"
-        >
-          <img src="/badges/google-play.png" alt="Get it on Google Play" className={`${google} w-auto`} />
-        </a>
-      ) : (
-        <div className="relative inline-block" aria-label="First Bite on Google Play — coming soon">
-          <img
-            src="/badges/google-play.png"
-            alt="Get it on Google Play — coming soon"
-            className={`${google} w-auto opacity-30 grayscale`}
-          />
-          <span className="absolute inset-0 flex items-center justify-center">
-            <span className="rounded-full bg-bg-primary/85 border border-border px-2.5 py-0.5 label-mono text-[10px] text-text-secondary whitespace-nowrap">
-              Coming soon
-            </span>
-          </span>
-        </div>
-      )}
-    </div>
+    <StoreBadges
+      appStore={APP_STORE_URL}
+      playStore={PLAY_STORE_URL}
+      appName="First Bite"
+      {...props}
+    />
   );
 }
 
@@ -161,6 +132,39 @@ const stack = [
 ];
 
 export default function FirstBitePage() {
+  const guides = sortPostsByDate(posts.filter((p) => p.app === 'first-bite')).slice(0, 3);
+
+  useSeo({
+    title: 'First Bite — Baby Allergen Introduction & First Foods App | Next Tech Labs',
+    description:
+      'First Bite is a free iOS and Android app for evidence-based allergen introduction: Big 9 protocols, an AI label scanner, caregiver sync, and a clinician-ready reaction log.',
+    path: '/projects/first-bite',
+    image: '/projects/first-bite-icon.png',
+    keywords: [
+      'baby allergen introduction app',
+      'food allergy tracker for babies',
+      'baby first foods app',
+      'allergen introduction tracker',
+      'first bite app',
+    ],
+    jsonLd: [
+      buildMobileAppJsonLd({
+        name: 'First Bite',
+        description:
+          'Evidence-based early-allergen introduction, maintenance tracking, an AI food-label safety scanner, and multi-caregiver sync for a baby\'s first 1,000 days.',
+        path: '/projects/first-bite',
+        image: '/projects/first-bite-icon.png',
+        appStore: APP_STORE_URL,
+        playStore: PLAY_STORE_URL,
+      }),
+      buildBreadcrumbJsonLd([
+        { name: 'Home', path: '/' },
+        { name: 'Projects', path: '/projects' },
+        { name: 'First Bite', path: '/projects/first-bite' },
+      ]),
+    ],
+  });
+
   return (
     <>
       {/* ───────────── HERO ───────────── */}
@@ -195,7 +199,7 @@ export default function FirstBitePage() {
             >
               <ArrowLeft size={14} strokeWidth={1.75} /> All projects
             </Link>
-            <StoreBadges />
+            <FirstBiteBadges />
           </div>
 
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -233,7 +237,7 @@ export default function FirstBitePage() {
               </motion.p>
 
               <motion.div variants={fadeUp} className="mt-10">
-                <StoreBadges size="lg" />
+                <FirstBiteBadges size="lg" />
               </motion.div>
 
               <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center gap-3">
@@ -541,6 +545,46 @@ export default function FirstBitePage() {
         </Container>
       </section>
 
+      {/* ───────────── GUIDES ───────────── */}
+      {guides.length > 0 && (
+        <section className="border-b border-border bg-bg-secondary/40">
+          <Container className="py-16 md:py-20">
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <SectionLabel number="·" label="GUIDES" />
+                <h2 className="mt-4 font-display text-3xl md:text-4xl font-semibold text-text-primary tracking-tight max-w-2xl leading-tight">
+                  The thinking behind the app, written out.
+                </h2>
+              </div>
+              <Link
+                to="/blog"
+                className="inline-flex items-center gap-2 label-mono text-text-secondary hover:text-accent transition-colors"
+              >
+                All articles <ArrowRight size={14} strokeWidth={2} />
+              </Link>
+            </div>
+
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {guides.map((g) => (
+                <Link
+                  key={g.slug}
+                  to={postPath(g.slug)}
+                  className="group rounded-2xl border border-border bg-bg-primary p-6 hover:border-[var(--color-accent-border)] hover:-translate-y-0.5 transition-all"
+                >
+                  <p className="label-mono text-text-muted tabular">{formatPostDate(g.published)}</p>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-text-primary leading-snug group-hover:text-accent transition-colors">
+                    {g.headline}
+                  </h3>
+                  <p className="mt-3 text-[15px] text-text-secondary leading-relaxed line-clamp-3">
+                    {g.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* ───────────── LEGAL ───────────── */}
       <section className="border-b border-border">
         <Container className="py-14 md:py-16">
@@ -606,7 +650,7 @@ export default function FirstBitePage() {
           <div className="mt-10 flex flex-col items-center gap-6">
             <div>
               <p className="label-mono text-text-muted mb-3">GET THE APP</p>
-              <StoreBadges size="lg" className="justify-center" />
+              <FirstBiteBadges size="lg" className="justify-center" />
             </div>
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <Link to="/contact">

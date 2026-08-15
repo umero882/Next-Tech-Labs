@@ -24,7 +24,10 @@ nexttech-portfolio/
 │   ├── project-overview.md
 │   └── ui-context.md
 │
-├── public/                      # Static assets served as-is (favicon, og image, robots.txt)
+├── public/                      # Static assets served as-is (favicon, og image, robots.txt, sitemap.xml)
+│
+├── scripts/
+│   └── generate-sitemap.mjs     # Plain Node. Writes public/sitemap.xml. Runs on `prebuild`.
 │
 ├── src/
 │   ├── main.jsx                 # React 19 entry, mounts <App />, sets up router
@@ -34,16 +37,20 @@ nexttech-portfolio/
 │   │
 │   ├── data/                    # Pure data, no React. Single source of truth for content.
 │   │   ├── projects.js          # Every showcased project (the heart of the site)
+│   │   ├── blog.js              # Blog post metadata (zero imports — the sitemap script reads it)
 │   │   ├── services.js          # What Next Tech Labs sells
 │   │   ├── company.js           # Brand info, contact channels, social links
 │   │   └── tech-stack.js        # Technologies used across projects (for filters + badges)
 │   │
 │   ├── lib/                     # Pure functions. No React. No side effects in module scope.
 │   │   ├── cn.js                # className merger (clsx + tailwind-merge style)
+│   │   ├── seo.js               # SITE constants + JSON-LD builders (no DOM)
+│   │   ├── blog.js              # Post selectors (sort, find, related, date format)
 │   │   ├── format.js            # Number/date formatters
 │   │   └── filter.js            # Project filter / sort helpers
 │   │
 │   ├── hooks/                   # Reusable React hooks. Each hook in its own file.
+│   │   ├── useSeo.js            # Per-route <head> tags + JSON-LD, reversed on unmount
 │   │   ├── useScrollProgress.js
 │   │   ├── useReducedMotion.js
 │   │   └── useProjectFilter.js
@@ -55,6 +62,7 @@ nexttech-portfolio/
 │   │   │   ├── Card.jsx
 │   │   │   ├── Container.jsx
 │   │   │   ├── SectionLabel.jsx     # The "01 / PROJECTS" editorial labels
+│   │   │   ├── StoreBadges.jsx      # Official App Store / Google Play badge pair
 │   │   │   ├── GridBackdrop.jsx     # The subtle dot/grid background
 │   │   │   └── MarqueeRow.jsx
 │   │   │
@@ -71,16 +79,26 @@ nexttech-portfolio/
 │   │   │   ├── TechStackTicker.jsx
 │   │   │   └── CallToAction.jsx
 │   │   │
-│   │   └── projects/            # Anything specific to rendering project entries.
-│   │       ├── ProjectCard.jsx
-│   │       ├── ProjectGrid.jsx
-│   │       ├── ProjectFilters.jsx
-│   │       └── ProjectMeta.jsx
+│   │   ├── projects/            # Anything specific to rendering project entries.
+│   │   │   ├── ProjectCard.jsx
+│   │   │   ├── ProjectGrid.jsx
+│   │   │   ├── ProjectFilters.jsx
+│   │   │   └── ProjectMeta.jsx
+│   │   │
+│   │   └── blog/                # Article rendering.
+│   │       ├── prose.jsx        # Article typography (Lead, H2, P, UL, Callout, Sources…)
+│   │       ├── articleBlocks.jsx# Takeaways, table of contents, FAQ, medical disclaimer
+│   │       ├── BlogCard.jsx
+│   │       └── DownloadCta.jsx  # App download CTA; store URLs read from data/projects.js
 │   │
 │   └── pages/                   # One file per route. Composes sections.
 │       ├── HomePage.jsx
 │       ├── ProjectsPage.jsx
 │       ├── ProjectDetailPage.jsx
+│       ├── BlogPage.jsx
+│       ├── BlogPostPage.jsx
+│       ├── blog/posts/*.jsx     # One article body per post, default-exported, keyed by slug
+│       ├── projects/*.jsx       # Custom showcase + legal pages per app
 │       ├── ServicesPage.jsx
 │       ├── AboutPage.jsx
 │       └── ContactPage.jsx
@@ -156,13 +174,33 @@ React Router 7 declarative mode. Routes registered in `App.jsx`.
 |---|---|---|
 | `/` | `HomePage` | Hero + featured projects + services preview + CTA |
 | `/projects` | `ProjectsPage` | Full filterable grid |
-| `/projects/:id` | `ProjectDetailPage` | Single project deep-dive |
+| `/projects/:id` | `ProjectDetailPage` | Single project deep-dive (delegates to a custom page for `password-manager` / `first-bite`) |
+| `/blog` | `BlogPage` | Article index. SEO surface for the First Bite app. |
+| `/blog/:slug` | `BlogPostPage` | Article. Metadata from `data/blog.js`, prose from `pages/blog/posts/<slug>.jsx`. |
 | `/services` | `ServicesPage` | What we offer |
 | `/about` | `AboutPage` | Company story + tech stack + brands |
 | `/contact` | `ContactPage` | Channels (email, WhatsApp, social). No form (no backend). |
 | `*` | inline 404 | Minimal not-found block, links back to `/` |
 
 `<RootLayout />` wraps every route and renders `<Navbar />` and `<Footer />` around the `<Outlet />`.
+
+### 5.1 SEO per route
+
+There is no SSR. Each page calls `useSeo({...})` (`hooks/useSeo.js`), which writes `<title>`, description,
+canonical, robots, Open Graph, Twitter, and `application/ld+json` into `<head>` — and reverses every change
+on unmount, so no route can leak metadata into the next one. The JSON-LD payloads are built by the pure
+helpers in `lib/seo.js` (`buildArticleJsonLd`, `buildFaqJsonLd`, `buildBreadcrumbJsonLd`, `buildBlogJsonLd`,
+`buildMobileAppJsonLd`).
+
+`public/sitemap.xml` is generated by `scripts/generate-sitemap.mjs` from the route table plus
+`data/projects.js` and `data/blog.js`. It runs automatically on `prebuild`; run it alone with `npm run sitemap`
+after adding a route, a project, or a post. `public/robots.txt` points at it.
+
+**Blog content model.** Post *metadata* lives in `data/blog.js` — pure, alias-free, zero imports, so the
+Node sitemap script can import it directly. Post *prose* lives in `pages/blog/posts/<slug>.jsx`, each module
+default-exporting the body component plus named `sections` (table of contents) and `sources` (citations).
+`BlogPostPage` joins the two by slug. `faqs[].a` in the metadata is plain text because it is emitted verbatim
+into `FAQPage` structured data — and the same array renders visibly on the page, which Google requires.
 
 ---
 

@@ -16,6 +16,8 @@ const FBPrivacy         = lazy(() => import('@/pages/projects/FirstBitePrivacyPa
 const FBTerms           = lazy(() => import('@/pages/projects/FirstBiteTermsPage'));
 const FBDelete          = lazy(() => import('@/pages/projects/FirstBiteDeleteAccountPage'));
 const FBSupport         = lazy(() => import('@/pages/projects/FirstBiteSupportPage'));
+const BlogPage          = lazy(() => import('@/pages/BlogPage'));
+const BlogPostPage      = lazy(() => import('@/pages/BlogPostPage'));
 const CategoriesPage    = lazy(() => import('@/pages/CategoriesPage'));
 const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
@@ -129,6 +131,22 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <ProjectDetailPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="blog"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <BlogPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="blog/:slug"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <BlogPostPage />
               </Suspense>
             }
           />

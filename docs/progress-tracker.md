@@ -9,10 +9,10 @@
 
 | Metric | Value |
 |---|---|
-| Phase | M1 — Initial scaffold |
-| Last updated | 2026-06-02 |
-| Next milestone | M2 — Polish + real cover art per project |
-| Live URL | _not deployed yet_ |
+| Phase | M3 — Distribution |
+| Last updated | 2026-08-15 |
+| Next milestone | Submit `sitemap.xml` to Google Search Console + Bing |
+| Live URL | https://nextechlabs.org |
 | Lighthouse (Mobile) | _not measured yet — capture on first deploy_ |
 
 ---
@@ -41,14 +41,17 @@
 - [ ] Deploy to Hostinger static hosting via `dist/` upload, behind Cloudflare
 - [ ] Custom domain: nexttechlabs.com (or .ae if AE-targeted)
 - [ ] Configure 301 redirects from old paths if any
-- [ ] Submit sitemap.xml to Google Search Console + Bing
-- [ ] Add JSON-LD `Organization` and `Person` schema
+- [x] Generate `sitemap.xml` + `robots.txt` (2026-08-15 — `scripts/generate-sitemap.mjs`, runs on `prebuild`)
+- [ ] **Submit sitemap.xml to Google Search Console + Bing** ← next SEO action, needs account access
+- [x] Add JSON-LD (2026-08-15 — `BlogPosting`, `FAQPage`, `BreadcrumbList`, `MobileApplication`, `Blog`)
+- [ ] Add JSON-LD `Organization` schema on the home/about pages
 
 ### M4 — Iteration & growth (planned)
 - [ ] Per-project case study pages (long-form, MDX or static markdown rendering)
 - [ ] Light theme variant (toggle, persisted to `localStorage`)
 - [ ] i18n: Arabic locale (RTL support) — relevant for GCC-facing brand
-- [ ] Blog section if Real News Hub or Islamic-history content needs a home
+- [x] Blog section (2026-08-15 — `/blog` shipped with the First Bite content cluster)
+- [ ] Prerender routes to static HTML so crawlers that don't execute JS see the copy
 
 ---
 
@@ -61,6 +64,15 @@ _Move items here when started, move out when done._
 ---
 
 ## Done log
+
+### 2026-08-15
+- ✅ **Shipped `/blog` — an SEO content cluster for the First Bite app.** Five long-form, source-cited articles at `/blog/:slug` targeting high-intent parent search: peanut introduction, the Big 9 allergen schedule, starting solids, food-allergy reaction signs, and baby-led weaning vs purées. Every post carries key takeaways, a table of contents, a visible FAQ that matches its `FAQPage` structured data, a linked sources list, a not-medical-advice disclaimer, a mid-article download strip, and a full App Store + Google Play download CTA. Metadata in `data/blog.js` (pure, importable by Node); prose in `pages/blog/posts/*.jsx`.
+- ✅ **Built the SEO layer the site never had.** `lib/seo.js` (pure JSON-LD builders + `SITE` constants) and `hooks/useSeo.js`, which writes per-route `<title>`, description, canonical, robots, OG, Twitter, and `ld+json` into `<head>` and reverses every change on unmount so routes can't leak metadata into each other. Applied to `/blog`, `/blog/:slug`, and the First Bite showcase page.
+- ✅ **`sitemap.xml` + `robots.txt`.** `scripts/generate-sitemap.mjs` derives 41 URLs from the route table, `data/projects.js`, and `data/blog.js`; wired to `prebuild` so it regenerates on every build (`npm run sitemap` to run it alone).
+- ✅ **Extracted `components/ui/StoreBadges.jsx`** — the official Apple/Google badge pair, previously duplicated inline in `FirstBitePage`. Props-driven with the grayscale "Coming soon" fallback preserved. First Bite page refactored onto it; store URLs for blog CTAs come from `data/projects.js` so the blog can't drift from the showcase.
+- ✅ **Internal linking:** Blog added to the Navbar and Footer; a "Guides" section on `/projects/first-bite` surfaces the three latest posts; posts cross-link each other and the app page.
+- ✅ Fixed the site-wide `og:image` (it pointed at a non-existent `/og.png`) and added the missing `og:url`, `og:site_name`, `twitter:*`, canonical, and robots defaults in `index.html`.
+- ✅ Verified on the production build: `/blog` and every post render, `<title>`/canonical/OG/article dates update per route, JSON-LD blocks are correct and are removed on route change, no horizontal overflow, store links resolve to both live listings. Initial JS still 116 KB gzipped (budget 180 KB); blog chunks 16 KB + 7 KB gzipped.
 
 ### 2026-06-27
 - ✅ **First Bite is live on Google Play production** (Android passed Google Play production review). Wired the live **Google Play** badge on the showcase page (`pages/projects/FirstBitePage.jsx` — set `PLAY_STORE_URL` → `com.firstbite.app`, retiring the grayscale "Coming soon" fallback), flipped the hero status badge ("Live on the App Store · Android soon" → "Live on the App Store + Google Play"), and updated `data/projects.js` (highlight copy + `links.playStore`). Deployed via Coolify; verified live (deployed `FirstBitePage-DzI_LEym.js` contains the Play URL + new badge, no stale "Android soon"/"Coming soon"; commit `8af8cbb`).
@@ -96,6 +108,18 @@ _Move items here when started, move out when done._
 ## Decisions log
 
 > Capture every non-obvious technical or design decision so future-you / future-AI doesn't redebate it.
+
+### 2026-08-15 — Runtime `<head>` injection, not SSR/prerender (for now)
+**Context**: The blog exists to rank. A client-rendered SPA ships one `index.html` with one set of meta tags for every route.
+**Decision**: Ship `hooks/useSeo.js`, which writes per-route title/description/canonical/OG/JSON-LD at runtime and reverses itself on unmount. No SSR, no prerender step, no new dependency.
+**Why**: Google renders JavaScript and indexes this correctly. A prerender pipeline (`react-dom/server` + a route crawler, or a plugin) is a build-architecture change on a deployed, working site — disproportionate to adding a blog. The gap it leaves is real but narrow: crawlers and social scrapers that *don't* execute JS (Bing historically, Slack/LinkedIn unfurls) see only the site-wide defaults.
+**Reversal cost**: Medium. `data/blog.js` is pure and route-addressable, so a prerender pass can enumerate every URL without touching the components. Tracked as an M4 item.
+
+### 2026-08-15 — Post metadata in `data/`, post prose in `pages/`
+**Context**: The layer rule forbids React imports in `data/`, but articles are JSX.
+**Decision**: Metadata (slug, title, description, keywords, dates, takeaways, FAQs) lives in `data/blog.js` with zero imports; the prose lives in `pages/blog/posts/<slug>.jsx` and is keyed by slug in `BlogPostPage`.
+**Why**: The index page, the JSON-LD builders, and `scripts/generate-sitemap.mjs` all need post metadata — and the sitemap script is plain Node with no bundler, so it can only import an alias-free, React-free module. Splitting keeps the layer rule intact and makes the sitemap free.
+**Reversal cost**: Low.
 
 ### 2026-05-06 — No backend, ever (in this repo)
 **Context**: Could have wired Firebase Auth + Hasura per the canonical modular-app-architecture skill.
@@ -142,6 +166,9 @@ _Things knowingly deferred. Each entry has an owner and an exit criterion._
 - **No TS types** — exit when contributor count > 1 or component count > 30. Owner: tech lead.
 - **CSS-only project covers** — placeholder gradient generator stands in until per-project art lands in M2. Owner: design.
 - **No analytics** — by design, but if a marketing need emerges, choose privacy-first (Plausible / Umami self-hosted on the existing VPS), not GA. Owner: product.
+- **No prerendered HTML** — per-route meta and JSON-LD are injected at runtime by `useSeo`, so non-JS crawlers see only the `index.html` defaults. Exit when Search Console shows indexing gaps on `/blog/*`, or when social unfurls matter commercially. Owner: product.
+- **No 1200×630 OG art** — social cards currently reuse square assets (`/intro-poster.png`, the First Bite icon), which platforms crop. Exit when the M2 OG-image generator lands; `SITE.defaultImage` in `lib/seo.js` is the single swap point. Owner: design.
+- **Blog posts statically imported** — all five prose modules load in one chunk (16 KB gzipped). Exit at ~20 posts: switch `postModules` in `BlogPostPage.jsx` to `lazy()`. Owner: tech lead.
 - **No automated test suite** — acceptable while site is single-author and content-only. Add Vitest + React Testing Library if interactive features grow (filter, search, modal flows). Owner: tech lead.
 
 ---
