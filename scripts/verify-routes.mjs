@@ -12,6 +12,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 
+import { projects } from '../src/data/projects.js';
+
 const here = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(here, '../dist');
 const sitemapFile = resolve(here, '../public/sitemap.xml');
@@ -71,6 +73,34 @@ console.log(`bundle: ${readdirSync(assetsDir).filter((f) => f.endsWith('.js')).l
 for (const route of ROUTE_EXPECTATIONS) {
   check(routeInBundle(js, route), `route in bundle: ${route}`);
 }
+
+// ── about-page registry ─────────────────────────────────────
+// `site.about` in src/data/projects.js drives two things: the nav item's
+// live-vs-`soon` chip, and whether generate-sitemap.mjs emits
+// `/projects/<id>/about`. A separate registry in ProjectAboutPage.jsx decides
+// what actually renders there -- deliberately separate, so a declaration that
+// runs ahead of its content degrades to a placeholder instead of crashing.
+// But if the two disagree, the failure is worse than the placeholder: the nav
+// shows "About" with no `soon` chip (a lie), and the sitemap can submit a URL
+// whose page renders noindex -- which Search Console flags.
+const aboutPageFile = resolve(here, '../src/pages/projects/ProjectAboutPage.jsx');
+const aboutPageSource = readFileSync(aboutPageFile, 'utf8');
+const registryBody = aboutPageSource.match(/const aboutPages = \{([\s\S]*?)\n\};/)?.[1] ?? '';
+const registryIds = [...registryBody.matchAll(/['"]([\w-]+)['"]\s*:/g)].map((m) => m[1]);
+
+const declaredIds = projects.filter((p) => p.site?.about).map((p) => p.id);
+const registrySet = new Set(registryIds);
+const declaredSet = new Set(declaredIds);
+const declaredButUnregistered = declaredIds.filter((id) => !registrySet.has(id));
+const registeredButUndeclared = registryIds.filter((id) => !declaredSet.has(id));
+const aboutInSync = declaredButUnregistered.length === 0 && registeredButUndeclared.length === 0;
+
+check(
+  aboutInSync,
+  aboutInSync
+    ? 'site.about declarations match the aboutPages registry'
+    : `site.about declarations match the aboutPages registry (declared but unregistered: [${declaredButUnregistered.join(', ')}]; registered but undeclared: [${registeredButUndeclared.join(', ')}])`,
+);
 
 // ── sitemap ─────────────────────────────────────────────────
 const sitemap = readFileSync(sitemapFile, 'utf8');
