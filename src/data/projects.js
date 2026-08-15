@@ -197,6 +197,8 @@ export const projects = [
       appStore: 'https://apps.apple.com/us/app/passvault-pro/id6758148655',
       playStore: 'https://play.google.com/store/apps/details?id=com.umero882.passwordvault',
     },
+    site: { blog: false, about: false },
+    support: { email: 'help+passwordmanager@nextechlabs.org', formKey: null },
     featured: true,
     cover: { type: 'image', image: '/projects/password-manager.png', size: 'contain' },
   },
@@ -223,6 +225,14 @@ export const projects = [
     links: {
       appStore: 'https://apps.apple.com/us/app/firstbite-baby-first-foods/id6775774829',
       playStore: 'https://play.google.com/store/apps/details?id=com.firstbite.app',
+    },
+    site: { blog: true, about: true },
+    support: {
+      email: 'help+firstbite@nextechlabs.org',
+      // Web3Forms access key — a public routing token, not a credential. It
+      // authorises exactly one thing: deliver a message to the address above.
+      // Null until the key is created; the form falls back to mailto meanwhile.
+      formKey: null,
     },
     featured: true,
     cover: { type: 'image', image: '/projects/first-bite-icon.png', size: 'contain' },
