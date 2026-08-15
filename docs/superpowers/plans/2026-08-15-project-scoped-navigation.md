@@ -1383,7 +1383,18 @@ Replace `export function ContactForm() {` through the end of `onSubmit` (the old
 
 ```jsx
 export function ContactForm({ variant = 'studio', project = null }) {
-  const isProduct = variant === 'product';
+  // Every product submit path reads project.id and project.name, so the product
+  // variant is meaningless without one. Degrade to the studio form rather than
+  // throwing -- this app has no error boundary, so a throw would blank the page
+  // instead of just losing a field set.
+  const isProduct = variant === 'product' && project != null;
+
+  if (import.meta.env?.DEV && variant === 'product' && !project) {
+    console.warn(
+      'ContactForm: variant="product" requires a `project` prop — falling back to the studio form.',
+    );
+  }
+
   const { email: recipient, formKey } = isProduct
     ? resolveSupport(project)
     : { email: company.channels.email, formKey: resolveSupport(null).formKey };
