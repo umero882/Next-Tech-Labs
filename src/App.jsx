@@ -21,6 +21,7 @@ const BlogPage          = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage      = lazy(() => import('@/pages/BlogPostPage'));
 const ProjectSoon       = lazy(() => import('@/pages/projects/ProjectComingSoonPage'));
 const ProjectAbout      = lazy(() => import('@/pages/projects/ProjectAboutPage'));
+const ProjectContact    = lazy(() => import('@/pages/projects/ProjectContactPage'));
 const CategoriesPage    = lazy(() => import('@/pages/CategoriesPage'));
 const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
@@ -188,6 +189,14 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <ProjectAbout />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/:id/contact"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProjectContact />
               </Suspense>
             }
           />
