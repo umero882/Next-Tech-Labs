@@ -109,10 +109,22 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://nextechlabs.org/projects/maid-book/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://nextechlabs.org/projects/training-academy-lms</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nextechlabs.org/projects/training-academy-lms/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://nextechlabs.org/projects/real-news-hub</loc>
@@ -121,10 +133,22 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://nextechlabs.org/projects/real-news-hub/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://nextechlabs.org/projects/ethiopian-maids</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nextechlabs.org/projects/ethiopian-maids/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://nextechlabs.org/projects/quran-teacher-ai</loc>
@@ -151,10 +175,28 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://nextechlabs.org/projects/password-manager/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://nextechlabs.org/projects/first-bite</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nextechlabs.org/projects/first-bite/about</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://nextechlabs.org/projects/first-bite/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://nextechlabs.org/projects/brandforge</loc>
@@ -187,10 +229,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://nextechlabs.org/projects/currencyflow/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://nextechlabs.org/projects/magi-shop</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://nextechlabs.org/projects/magi-shop/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://nextechlabs.org/projects/islamic-history-channel</loc>
@@ -211,10 +265,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://nextechlabs.org/projects/payroll-system/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://nextechlabs.org/projects/ntl-rig</loc>
     <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://nextechlabs.org/projects/ntl-rig/contact</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://nextechlabs.org/projects/first-bite/blog/when-to-introduce-peanut-butter-to-baby</loc>

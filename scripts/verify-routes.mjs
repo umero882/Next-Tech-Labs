@@ -43,6 +43,8 @@ function routeInBundle(js, route) {
 const SITEMAP_REQUIRED = [
   '/projects/first-bite',
   '/projects/first-bite/blog',
+  '/projects/first-bite/about',
+  '/projects/first-bite/contact',
 ];
 
 /** Paths the sitemap must never list — placeholders and noindex pages. */

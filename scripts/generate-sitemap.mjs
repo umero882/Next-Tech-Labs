@@ -53,6 +53,25 @@ for (const project of projects) {
     changefreq: 'monthly',
     priority: project.featured ? '0.8' : '0.6',
   });
+
+  // About pages only where one is actually written.
+  if (project.site?.about) {
+    entries.push({
+      path: `/projects/${project.id}/about`,
+      changefreq: 'monthly',
+      priority: '0.6',
+    });
+  }
+
+  // Every project has a contact route, but a concept project's is a thin page
+  // with nothing to rank for. Index the shipped ones only.
+  if (project.status === 'live') {
+    entries.push({
+      path: `/projects/${project.id}/contact`,
+      changefreq: 'yearly',
+      priority: '0.4',
+    });
+  }
 }
 
 for (const post of posts) {
