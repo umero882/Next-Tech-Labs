@@ -630,7 +630,18 @@ export function RootLayout() {
     // With a hash, scrolling to the top would fight the anchor. The target may
     // not exist yet -- routes are lazy, so the page can still be resolving --
     // so retry for about a second before giving up.
-    const id = decodeURIComponent(hash.slice(1));
+    //
+    // A malformed fragment (hand-edited URL, truncated paste) makes
+    // decodeURIComponent throw. This app has no error boundary, so an uncaught
+    // throw here would blank the whole page rather than just miss a scroll. The
+    // value is only ever an id lookup, so the raw fragment is a fine fallback.
+    let id;
+    try {
+      id = decodeURIComponent(hash.slice(1));
+    } catch {
+      id = hash.slice(1);
+    }
+
     let frames = 0;
     let raf = 0;
 
