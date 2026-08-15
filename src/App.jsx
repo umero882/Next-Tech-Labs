@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Link, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { RootLayout } from '@/components/layout/RootLayout';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -32,19 +32,6 @@ function PageFallback() {
       <span className="label-mono text-text-muted">Loading…</span>
     </div>
   );
-}
-
-/**
- * /projects/first-bite/blog/<slug> → /blog/<slug>.
- *
- * `Navigate` cannot interpolate a route param on its own, and a guessed scoped
- * post URL should land on the post rather than the listing — dropping someone on
- * the index when they asked for a specific article is a worse answer than the
- * 404 was.
- */
-function ScopedPostRedirect() {
-  const { slug } = useParams();
-  return <Navigate to={`/blog/${slug}`} replace />;
 }
 
 function NotFound() {
@@ -139,20 +126,6 @@ export default function App() {
               </Suspense>
             }
           />
-          {/*
-            /blog IS the First Bite blog — its own title says so, every post is
-            `app: 'first-bite'`, and its CTA is the app. So the project-scoped URL
-            people reach for redirects there instead of rendering a second copy of
-            the same listing, which would split the content across two indexable
-            URLs for no reader benefit.
-
-            nginx serves the real 301 for direct hits (see nginx.conf); these
-            routes cover in-app navigation and `npm run dev`, where nginx is not in
-            the loop at all. When a second app gets posts, this becomes a real
-            filtered listing keyed on the `app` field rather than a redirect.
-          */}
-          <Route path="projects/first-bite/blog" element={<Navigate to="/blog" replace />} />
-          <Route path="projects/first-bite/blog/:slug" element={<ScopedPostRedirect />} />
           <Route
             path="projects/:id"
             element={
