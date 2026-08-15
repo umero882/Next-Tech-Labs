@@ -20,6 +20,7 @@ const FBSupport         = lazy(() => import('@/pages/projects/FirstBiteSupportPa
 const BlogPage          = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage      = lazy(() => import('@/pages/BlogPostPage'));
 const ProjectSoon       = lazy(() => import('@/pages/projects/ProjectComingSoonPage'));
+const ProjectAbout      = lazy(() => import('@/pages/projects/ProjectAboutPage'));
 const CategoriesPage    = lazy(() => import('@/pages/CategoriesPage'));
 const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
@@ -179,6 +180,14 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <ProjectSoon section="A blog" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/:id/about"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProjectAbout />
               </Suspense>
             }
           />

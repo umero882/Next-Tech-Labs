@@ -28,6 +28,7 @@ const sitemapFile = resolve(here, '../public/sitemap.xml');
 const ROUTE_EXPECTATIONS = [
   'projects/:id/blog',
   'projects/first-bite/blog',
+  'projects/:id/about',
   'projects/:id',
 ];
 
