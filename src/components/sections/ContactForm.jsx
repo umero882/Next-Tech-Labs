@@ -270,7 +270,7 @@ export function ContactForm() {
         <label htmlFor="cf-consent" className="text-sm text-text-secondary leading-relaxed">
           I agree to be contacted about this inquiry. We don’t add you to any list. See our{' '}
           <a
-            href="/projects/password-manager/privacy"
+            href="/privacy"
             className="text-accent hover:underline"
           >
             privacy approach
