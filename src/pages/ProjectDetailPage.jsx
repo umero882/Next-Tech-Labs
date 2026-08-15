@@ -134,7 +134,7 @@ export default function ProjectDetailPage() {
         </article>
 
         {/* Right: meta */}
-        <aside className="lg:col-span-4 lg:sticky lg:top-24 self-start">
+        <aside id="get-the-app" className="lg:col-span-4 lg:sticky lg:top-24 self-start scroll-mt-24">
           <div className="border border-border rounded-2xl p-6 md:p-8 bg-bg-secondary space-y-6">
             <Meta label="Category" value={project.category.replace('-', ' / ').toUpperCase()} />
             <Meta label="Year" value={project.year} mono />
