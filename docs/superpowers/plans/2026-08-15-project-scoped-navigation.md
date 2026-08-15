@@ -1229,7 +1229,11 @@ Then add, directly after the `projects/:id/blog` route added in Task 4:
 
 - [ ] **Step 4: Extend the verifier**
 
-In `scripts/verify-routes.mjs`, add `'projects/:id/about'` to `ROUTE_EXPECTATIONS` and `'/projects/first-bite/about'` to `SITEMAP_REQUIRED`. (The sitemap entry itself arrives in Task 8, so expect that one line to fail until then — the route check must pass now.)
+In `scripts/verify-routes.mjs`, add `'projects/:id/about'` to `ROUTE_EXPECTATIONS`.
+
+Do **not** touch `SITEMAP_REQUIRED` — the sitemap entries arrive in Task 8, and
+adding the expectation now would make `npm run verify` exit non-zero for reasons
+outside this task.
 
 - [ ] **Step 5: Verify**
 
@@ -1237,7 +1241,7 @@ In `scripts/verify-routes.mjs`, add `'projects/:id/about'` to `ROUTE_EXPECTATION
 cd "C:/dev/Next Tech Labs" && npm test && npm run build && npm run verify
 ```
 
-Expected: tests PASS, build succeeds, verifier PASSes every check except `sitemap lists /projects/first-bite/about`, which Task 8 fixes.
+Expected: tests PASS, build succeeds, **all** verifier checks PASS.
 
 - [ ] **Step 6: Eyeball it**
 
@@ -1712,7 +1716,9 @@ and, directly after the `projects/:id/about` route:
 
 - [ ] **Step 3: Extend the verifier**
 
-In `scripts/verify-routes.mjs`, add `'projects/:id/contact'` to `ROUTE_EXPECTATIONS` and `'/projects/first-bite/contact'` to `SITEMAP_REQUIRED`.
+In `scripts/verify-routes.mjs`, add `'projects/:id/contact'` to `ROUTE_EXPECTATIONS`.
+
+Do **not** touch `SITEMAP_REQUIRED` — Task 8 owns those entries.
 
 - [ ] **Step 4: Verify**
 
@@ -1720,7 +1726,7 @@ In `scripts/verify-routes.mjs`, add `'projects/:id/contact'` to `ROUTE_EXPECTATI
 cd "C:/dev/Next Tech Labs" && npm test && npm run build && npm run verify
 ```
 
-Expected: tests PASS, build succeeds, verifier PASSes except the two sitemap lines Task 8 adds.
+Expected: tests PASS, build succeeds, **all** verifier checks PASS.
 
 - [ ] **Step 5: Eyeball it**
 
@@ -1744,10 +1750,13 @@ and is reachable from here."
 
 **Files:**
 - Modify: `scripts/generate-sitemap.mjs` (the project loop, lines 50–56)
+- Modify: `scripts/verify-routes.mjs` (`SITEMAP_REQUIRED`)
 
 **Interfaces:**
 - Consumes: `site.about` and `status` from the project data (Task 1).
-- Produces: sitemap entries the Task 4 verifier asserts.
+- Produces: sitemap entries the Task 4 verifier asserts. This task owns every
+  `SITEMAP_REQUIRED` entry for the new pages — Tasks 5 and 7 deliberately left
+  them out so `npm run verify` stayed green throughout.
 
 - [ ] **Step 1: Extend the project loop**
 
@@ -1782,15 +1791,28 @@ for (const project of projects) {
 }
 ```
 
-- [ ] **Step 2: Regenerate and verify**
+- [ ] **Step 2: Assert the new entries in the verifier**
+
+In `scripts/verify-routes.mjs`, extend `SITEMAP_REQUIRED` so it reads:
+
+```js
+const SITEMAP_REQUIRED = [
+  '/projects/first-bite',
+  '/projects/first-bite/blog',
+  '/projects/first-bite/about',
+  '/projects/first-bite/contact',
+];
+```
+
+- [ ] **Step 3: Regenerate and verify**
 
 ```bash
 cd "C:/dev/Next Tech Labs" && npm run sitemap && npm run build && npm run verify
 ```
 
-Expected: the sitemap reports a higher URL count than before, and **every** verifier check now PASSes.
+Expected: the sitemap reports a higher URL count than before, and **every** verifier check PASSes.
 
-- [ ] **Step 3: Confirm placeholders stayed out**
+- [ ] **Step 4: Confirm placeholders stayed out**
 
 ```bash
 cd "C:/dev/Next Tech Labs" && grep -c "/about</loc>\|/contact</loc>" public/sitemap.xml && grep -n "tidyspace/about\|password-manager/blog" public/sitemap.xml
@@ -1798,11 +1820,11 @@ cd "C:/dev/Next Tech Labs" && grep -c "/about</loc>\|/contact</loc>" public/site
 
 Expected: a count on the first command; **no output** from the second.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 cd "C:/dev/Next Tech Labs"
-git add scripts/generate-sitemap.mjs public/sitemap.xml
+git add scripts/generate-sitemap.mjs scripts/verify-routes.mjs public/sitemap.xml
 git commit -m "feat(seo): list project about and contact pages in the sitemap
 
 About pages where one is written, contact pages for shipped products only --
