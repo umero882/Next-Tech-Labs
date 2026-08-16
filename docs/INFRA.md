@@ -56,7 +56,7 @@ coolify              A  76.13.240.144   TTL 300
 | Server | localhost (uuid `tryriohi8f392b701scysv6k`) |
 | Destination | `coolify` Docker network |
 
-Auto‑deploy on push to `main` is **off** (no GitHub webhook configured). To redeploy after a push, either click *Deploy* in the dashboard at `https://coolify.nextechlabs.tech` (login + 2FA), or call the API **over the tailnet** (see below).
+Auto‑deploy on push to `main` is **off** (no GitHub webhook configured). To redeploy after a push, either click *Deploy* in the dashboard at `https://coolify.nextechlabs.tech` (login + 2FA), or call the API (see below).
 
 Applications on this Coolify instance (verified live 2026‑06‑02):
 
@@ -65,14 +65,32 @@ Applications on this Coolify instance (verified live 2026‑06‑02):
 | `nexttechlabs-portfolio` | `t9jfrtoz8q7h9jfzigp6fchv` | `nextechlabs.org`, `www.nextechlabs.org` | `umero882/Next-Tech-Labs` @ `main` |
 | `firstbite-hasura` | `b8nt6wnfav2lp95gepnhybn2` | `hasura.nextechlabs.tech` | — |
 
-> **API access is tailnet‑only.** The public FQDN (`https://coolify.nextechlabs.tech/api/...`) returns **403** by the IP allowlist; calls must originate from the tailnet (`http://100.124.164.50:8000`). The bearer token lives at `C:\Admin\Coolify\httpscoolify.nextechlabs.techsecurityapi-tokens\API KEY.txt` (that path is a **folder** containing `API KEY.txt`). A `GET /api/v1/deploy?uuid=...` (force optional) queues a rebuild from `main`.
+> **The public API endpoint works.** An earlier revision of this file said the
+> public FQDN returned **403** by IP allowlist and that calls had to originate
+> from the tailnet. That is no longer true — corrected 2026‑08‑16 after three
+> deploys ran against `https://coolify.nextechlabs.tech/api/v1/...` and returned
+> 200. The tailnet address (`http://100.124.164.50:8000`) still works and remains
+> the fallback if the public endpoint is ever locked down again.
+>
+> The bearer token lives at `C:\Admin\Coolify\httpscoolify.nextechlabs.techsecurityapi-tokens\API KEY.txt` (that path is a **folder** containing `API KEY.txt`). A `GET /api/v1/deploy?uuid=...` (force optional) queues a rebuild from `main`.
 
 ```powershell
 $tok = (Get-Content -LiteralPath "C:\Admin\Coolify\httpscoolify.nextechlabs.techsecurityapi-tokens\API KEY.txt" -Raw).Trim()
 Invoke-RestMethod -Method Get `
-  -Uri "http://100.124.164.50:8000/api/v1/deploy?uuid=t9jfrtoz8q7h9jfzigp6fchv" `
+  -Uri "https://coolify.nextechlabs.tech/api/v1/deploy?uuid=t9jfrtoz8q7h9jfzigp6fchv" `
   -Headers @{ Authorization = "Bearer $tok" }
 ```
+
+The response carries a `deployment_uuid`; the build itself is **not** instant, and
+`GET /api/v1/deployments/<deployment_uuid>` reports the *application* status
+(`running:healthy`), not the build's. To confirm a deploy actually shipped, check
+the live site rather than the API: fetch a page, pull the hashed entry bundle out
+of its `<script src>`, and grep that bundle for a string only the new code
+contains. A 200 from an SPA proves nothing — every path returns the shell.
+
+Since 2026‑08‑16 the Docker build stage also runs `npm test` and `npm run verify`
+before producing the image, so a failing test or a missing route fails the
+**build** and Coolify keeps the previous container serving.
 
 ---
 
