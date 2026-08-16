@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { SITE, absoluteUrl } from '@/lib/seo';
+import { SITE, absoluteUrl, toIsoDateTime } from '@/lib/seo';
 
 /**
  * Writes per-route SEO tags into <head> and reverses every change on unmount.
@@ -88,8 +88,10 @@ export function useSeo(seo) {
     og('og:site_name', SITE.name);
     og('og:locale', SITE.locale);
     if (type === 'article') {
-      og('article:published_time', published);
-      og('article:modified_time', updated || published);
+      // Full ISO 8601 with an offset — bare YYYY-MM-DD is flagged as an invalid
+      // datetime by Google's structured-data validation.
+      og('article:published_time', toIsoDateTime(published));
+      og('article:modified_time', toIsoDateTime(updated || published));
       og('article:publisher', SITE.name);
     }
 

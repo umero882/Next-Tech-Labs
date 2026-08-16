@@ -23,6 +23,21 @@ export function absoluteUrl(path = '/') {
 }
 
 /**
+ * Widen a plain `YYYY-MM-DD` to a full ISO 8601 datetime with an explicit
+ * offset. Posts are authored as bare dates because that is what a human wants
+ * to type, but Google's Rich Results Test flags a bare date on
+ * datePublished/dateModified as "Invalid datetime value" + "missing a
+ * timezone". Midnight UTC is the honest reading of a date with no time on it.
+ *
+ * Anything that already carries a time is passed through untouched.
+ */
+export function toIsoDateTime(date) {
+  if (!date) return undefined;
+  if (date.includes('T')) return date;
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T00:00:00+00:00` : date;
+}
+
+/**
  * BlogPosting schema for a single article.
  * @param {{title: string, description: string, path: string, image?: string,
  *          published: string, updated?: string, author?: string, keywords?: string[]}} post
@@ -35,8 +50,8 @@ export function buildArticleJsonLd(post) {
     headline: post.title,
     description: post.description,
     image: [absoluteUrl(post.image || SITE.defaultImage)],
-    datePublished: post.published,
-    dateModified: post.updated || post.published,
+    datePublished: toIsoDateTime(post.published),
+    dateModified: toIsoDateTime(post.updated || post.published),
     inLanguage: 'en',
     author: { '@type': 'Organization', name: post.author || SITE.name, url: SITE.url },
     publisher: {
@@ -101,8 +116,8 @@ export function buildBlogJsonLd({ path, name, description, posts = [] }) {
       '@type': 'BlogPosting',
       headline: p.title,
       description: p.description,
-      datePublished: p.published,
-      dateModified: p.updated || p.published,
+      datePublished: toIsoDateTime(p.published),
+      dateModified: toIsoDateTime(p.updated || p.published),
       url: absoluteUrl(`/blog/${p.slug}`),
     })),
   };
