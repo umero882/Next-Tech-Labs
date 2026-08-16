@@ -51,7 +51,7 @@
 - [ ] Light theme variant (toggle, persisted to `localStorage`)
 - [ ] i18n: Arabic locale (RTL support) — relevant for GCC-facing brand
 - [x] Blog section (2026-08-15 — `/blog` shipped with the First Bite content cluster)
-- [ ] Prerender routes to static HTML so crawlers that don't execute JS see the copy
+- [ ] ~~Prerender routes to static HTML~~ — **measured 2026-08-17: not needed for Google.** Keep parked unless a non-Google surface justifies it (see Decisions log).
 
 ---
 
@@ -64,6 +64,12 @@ _Move items here when started, move out when done._
 ---
 
 ## Done log
+
+### 2026-08-17
+- ✅ **Settled the prerendering question with a measurement instead of a guess.** Ran the live peanut post through Google's Rich Results Test (same renderer Googlebot indexes with). Raw HTML is an empty shell — default title, canonical pointing at `/`, zero JSON-LD. After Googlebot renders: correct per-route title, correct canonical, all four JSON-LD blocks, full article body in Google's own screenshot, **3 valid rich-result items**. Conclusion: prerendering is unnecessary for search. Tech-debt entry downgraded, M4 item parked. Detail in the Decisions log.
+- ✅ **Fixed the 4 non-critical structured-data warnings it surfaced.** `datePublished`/`dateModified` carried a bare `YYYY-MM-DD`, which Google flags as "Invalid datetime value" + "missing a timezone". Added `toIsoDateTime()` in `lib/seo.js` — posts stay authored as plain dates in `data/blog.js`, and the builder widens them to midnight UTC with an explicit offset. Applied to `BlogPosting`, the `Blog` index listing, and the OG `article:published_time`/`article:modified_time` tags. Re-tested after deploy: **Articles now reports zero issues** (`ddb7e12`).
+- ✅ Left the remaining `Missing field "aggregateRating"` warning on Software Apps **deliberately** — we don't invent review data. It resolves itself when the store listings have real ratings worth citing.
+- ✅ Tests: 6 new cases in `src/lib/seo.test.js`; suite 16/16 green. `npm run verify` passes.
 
 ### 2026-08-15
 - ✅ **Shipped `/blog` — an SEO content cluster for the First Bite app.** Five long-form, source-cited articles at `/blog/:slug` targeting high-intent parent search: peanut introduction, the Big 9 allergen schedule, starting solids, food-allergy reaction signs, and baby-led weaning vs purées. Every post carries key takeaways, a table of contents, a visible FAQ that matches its `FAQPage` structured data, a linked sources list, a not-medical-advice disclaimer, a mid-article download strip, and a full App Store + Google Play download CTA. Metadata in `data/blog.js` (pure, importable by Node); prose in `pages/blog/posts/*.jsx`.
@@ -114,6 +120,17 @@ _Move items here when started, move out when done._
 **Decision**: Ship `hooks/useSeo.js`, which writes per-route title/description/canonical/OG/JSON-LD at runtime and reverses itself on unmount. No SSR, no prerender step, no new dependency.
 **Why**: Google renders JavaScript and indexes this correctly. A prerender pipeline (`react-dom/server` + a route crawler, or a plugin) is a build-architecture change on a deployed, working site — disproportionate to adding a blog. The gap it leaves is real but narrow: crawlers and social scrapers that *don't* execute JS (Bing historically, Slack/LinkedIn unfurls) see only the site-wide defaults.
 **Reversal cost**: Medium. `data/blog.js` is pure and route-addressable, so a prerender pass can enumerate every URL without touching the components. Tracked as an M4 item.
+
+**Verified 2026-08-17 — the assumption held, don't redebate this.** Ran the live peanut post through Google's Rich Results Test, which uses the same Web Rendering Service Googlebot indexes with:
+
+| Check | Raw HTML (no JS) | Googlebot after render |
+|---|---|---|
+| `<title>` | site-wide default | correct per-route title |
+| canonical | `https://nextechlabs.org/` | correct post URL |
+| JSON-LD blocks | 0 | 4 (BlogPosting, FAQPage, BreadcrumbList, MobileApplication) |
+| Article body | absent | full page, confirmed in Google's own screenshot |
+
+Result: **3 valid rich-result items detected** (Articles, Breadcrumbs, Software Apps). So prerendering buys nothing for Google Search and is not worth the build-architecture change. Revisit only for surfaces that read raw HTML — social unfurls — not for ranking.
 
 ### 2026-08-15 — Post metadata in `data/`, post prose in `pages/`
 **Context**: The layer rule forbids React imports in `data/`, but articles are JSX.
@@ -166,7 +183,7 @@ _Things knowingly deferred. Each entry has an owner and an exit criterion._
 - **No TS types** — exit when contributor count > 1 or component count > 30. Owner: tech lead.
 - **CSS-only project covers** — placeholder gradient generator stands in until per-project art lands in M2. Owner: design.
 - **No analytics** — by design, but if a marketing need emerges, choose privacy-first (Plausible / Umami self-hosted on the existing VPS), not GA. Owner: product.
-- **No prerendered HTML** — per-route meta and JSON-LD are injected at runtime by `useSeo`, so non-JS crawlers see only the `index.html` defaults. Exit when Search Console shows indexing gaps on `/blog/*`, or when social unfurls matter commercially. Owner: product.
+- **No prerendered HTML** — per-route meta and JSON-LD are injected at runtime by `useSeo`, so non-JS crawlers see only the `index.html` defaults. **Measured 2026-08-17 against Google's live renderer: Googlebot handles it correctly**, so this is no longer debt for search. It remains a real gap only for non-rendering consumers — Slack/LinkedIn/WhatsApp unfurls, and any scraper that reads raw HTML. Exit when link previews matter commercially. Owner: product.
 - **No 1200×630 OG art** — social cards currently reuse square assets (`/intro-poster.png`, the First Bite icon), which platforms crop. Exit when the M2 OG-image generator lands; `SITE.defaultImage` in `lib/seo.js` is the single swap point. Owner: design.
 - **Blog posts statically imported** — all five prose modules load in one chunk (16 KB gzipped). Exit at ~20 posts: switch `postModules` in `BlogPostPage.jsx` to `lazy()`. Owner: tech lead.
 - **No automated test suite** — acceptable while site is single-author and content-only. Add Vitest + React Testing Library if interactive features grow (filter, search, modal flows). Owner: tech lead.
