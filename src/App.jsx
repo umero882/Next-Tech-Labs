@@ -19,6 +19,9 @@ const FBDelete          = lazy(() => import('@/pages/projects/FirstBiteDeleteAcc
 const FBSupport         = lazy(() => import('@/pages/projects/FirstBiteSupportPage'));
 const BlogPage          = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage      = lazy(() => import('@/pages/BlogPostPage'));
+const ProjectSoon       = lazy(() => import('@/pages/projects/ProjectComingSoonPage'));
+const ProjectAbout      = lazy(() => import('@/pages/projects/ProjectAboutPage'));
+const ProjectContact    = lazy(() => import('@/pages/projects/ProjectContactPage'));
 const CategoriesPage    = lazy(() => import('@/pages/CategoriesPage'));
 const TechPage          = lazy(() => import('@/pages/TechPage'));
 const ServicesPage      = lazy(() => import('@/pages/ServicesPage'));
@@ -164,6 +167,36 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <BlogPostPage />
+              </Suspense>
+            }
+          />
+          {/*
+            Gated project pages. These sit above `projects/:id` because that
+            dynamic route would swallow them, and below the static
+            `projects/first-bite/blog` routes, which React Router already ranks
+            higher than `projects/:id/blog` — static segments beat dynamic ones.
+          */}
+          <Route
+            path="projects/:id/blog"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProjectSoon section="A blog" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/:id/about"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProjectAbout />
+              </Suspense>
+            }
+          />
+          <Route
+            path="projects/:id/contact"
+            element={
+              <Suspense fallback={<PageFallback />}>
+                <ProjectContact />
               </Suspense>
             }
           />

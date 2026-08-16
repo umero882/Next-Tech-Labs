@@ -9,9 +9,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 
-# Build the static site
+# Run the test suite, build the static site, then verify the build output
 COPY . .
+RUN npm test
 RUN npm run build
+RUN npm run verify
 
 # ─── runtime stage ──────────────────────────────────────────
 FROM nginx:1.27-alpine AS runtime

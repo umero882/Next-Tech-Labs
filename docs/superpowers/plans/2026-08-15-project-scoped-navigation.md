@@ -630,7 +630,18 @@ export function RootLayout() {
     // With a hash, scrolling to the top would fight the anchor. The target may
     // not exist yet -- routes are lazy, so the page can still be resolving --
     // so retry for about a second before giving up.
-    const id = decodeURIComponent(hash.slice(1));
+    //
+    // A malformed fragment (hand-edited URL, truncated paste) makes
+    // decodeURIComponent throw. This app has no error boundary, so an uncaught
+    // throw here would blank the whole page rather than just miss a scroll. The
+    // value is only ever an id lookup, so the raw fragment is a fine fallback.
+    let id;
+    try {
+      id = decodeURIComponent(hash.slice(1));
+    } catch {
+      id = hash.slice(1);
+    }
+
     let frames = 0;
     let raf = 0;
 
@@ -894,12 +905,26 @@ const here = dirname(fileURLToPath(import.meta.url));
 const distDir = resolve(here, '../dist');
 const sitemapFile = resolve(here, '../public/sitemap.xml');
 
-/** Route patterns that must survive into the shipped JS. */
+/**
+ * Route patterns that must survive into the shipped JS.
+ *
+ * Checked delimiter-bounded, not by bare substring: 'projects/first-bite/blog'
+ * is a prefix of 'projects/first-bite/blog/:slug', and 'projects/:id' is a
+ * prefix of 'projects/:id/blog', so a substring check would keep passing after
+ * the route it names was deleted -- exactly the regression this file exists to
+ * catch.
+ */
 const ROUTE_EXPECTATIONS = [
   'projects/:id/blog',
   'projects/first-bite/blog',
   'projects/:id',
 ];
+
+/** True when `route` appears in `js` as a complete quoted string literal. */
+function routeInBundle(js, route) {
+  const escaped = route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`["'\`]${escaped}["'\`]`).test(js);
+}
 
 /** Paths the sitemap must list. */
 const SITEMAP_REQUIRED = [
@@ -929,7 +954,7 @@ const js = readdirSync(assetsDir)
 
 console.log(`bundle: ${readdirSync(assetsDir).filter((f) => f.endsWith('.js')).length} JS chunk(s)`);
 for (const route of ROUTE_EXPECTATIONS) {
-  check(js.includes(route), `route in bundle: ${route}`);
+  check(routeInBundle(js, route), `route in bundle: ${route}`);
 }
 
 // ── sitemap ─────────────────────────────────────────────────
@@ -1229,7 +1254,11 @@ Then add, directly after the `projects/:id/blog` route added in Task 4:
 
 - [ ] **Step 4: Extend the verifier**
 
-In `scripts/verify-routes.mjs`, add `'projects/:id/about'` to `ROUTE_EXPECTATIONS` and `'/projects/first-bite/about'` to `SITEMAP_REQUIRED`. (The sitemap entry itself arrives in Task 8, so expect that one line to fail until then — the route check must pass now.)
+In `scripts/verify-routes.mjs`, add `'projects/:id/about'` to `ROUTE_EXPECTATIONS`.
+
+Do **not** touch `SITEMAP_REQUIRED` — the sitemap entries arrive in Task 8, and
+adding the expectation now would make `npm run verify` exit non-zero for reasons
+outside this task.
 
 - [ ] **Step 5: Verify**
 
@@ -1237,7 +1266,7 @@ In `scripts/verify-routes.mjs`, add `'projects/:id/about'` to `ROUTE_EXPECTATION
 cd "C:/dev/Next Tech Labs" && npm test && npm run build && npm run verify
 ```
 
-Expected: tests PASS, build succeeds, verifier PASSes every check except `sitemap lists /projects/first-bite/about`, which Task 8 fixes.
+Expected: tests PASS, build succeeds, **all** verifier checks PASS.
 
 - [ ] **Step 6: Eyeball it**
 
@@ -1354,7 +1383,18 @@ Replace `export function ContactForm() {` through the end of `onSubmit` (the old
 
 ```jsx
 export function ContactForm({ variant = 'studio', project = null }) {
-  const isProduct = variant === 'product';
+  // Every product submit path reads project.id and project.name, so the product
+  // variant is meaningless without one. Degrade to the studio form rather than
+  // throwing -- this app has no error boundary, so a throw would blank the page
+  // instead of just losing a field set.
+  const isProduct = variant === 'product' && project != null;
+
+  if (import.meta.env?.DEV && variant === 'product' && !project) {
+    console.warn(
+      'ContactForm: variant="product" requires a `project` prop — falling back to the studio form.',
+    );
+  }
+
   const { email: recipient, formKey } = isProduct
     ? resolveSupport(project)
     : { email: company.channels.email, formKey: resolveSupport(null).formKey };
@@ -1712,7 +1752,9 @@ and, directly after the `projects/:id/about` route:
 
 - [ ] **Step 3: Extend the verifier**
 
-In `scripts/verify-routes.mjs`, add `'projects/:id/contact'` to `ROUTE_EXPECTATIONS` and `'/projects/first-bite/contact'` to `SITEMAP_REQUIRED`.
+In `scripts/verify-routes.mjs`, add `'projects/:id/contact'` to `ROUTE_EXPECTATIONS`.
+
+Do **not** touch `SITEMAP_REQUIRED` — Task 8 owns those entries.
 
 - [ ] **Step 4: Verify**
 
@@ -1720,7 +1762,7 @@ In `scripts/verify-routes.mjs`, add `'projects/:id/contact'` to `ROUTE_EXPECTATI
 cd "C:/dev/Next Tech Labs" && npm test && npm run build && npm run verify
 ```
 
-Expected: tests PASS, build succeeds, verifier PASSes except the two sitemap lines Task 8 adds.
+Expected: tests PASS, build succeeds, **all** verifier checks PASS.
 
 - [ ] **Step 5: Eyeball it**
 
@@ -1744,10 +1786,13 @@ and is reachable from here."
 
 **Files:**
 - Modify: `scripts/generate-sitemap.mjs` (the project loop, lines 50–56)
+- Modify: `scripts/verify-routes.mjs` (`SITEMAP_REQUIRED`)
 
 **Interfaces:**
 - Consumes: `site.about` and `status` from the project data (Task 1).
-- Produces: sitemap entries the Task 4 verifier asserts.
+- Produces: sitemap entries the Task 4 verifier asserts. This task owns every
+  `SITEMAP_REQUIRED` entry for the new pages — Tasks 5 and 7 deliberately left
+  them out so `npm run verify` stayed green throughout.
 
 - [ ] **Step 1: Extend the project loop**
 
@@ -1782,15 +1827,28 @@ for (const project of projects) {
 }
 ```
 
-- [ ] **Step 2: Regenerate and verify**
+- [ ] **Step 2: Assert the new entries in the verifier**
+
+In `scripts/verify-routes.mjs`, extend `SITEMAP_REQUIRED` so it reads:
+
+```js
+const SITEMAP_REQUIRED = [
+  '/projects/first-bite',
+  '/projects/first-bite/blog',
+  '/projects/first-bite/about',
+  '/projects/first-bite/contact',
+];
+```
+
+- [ ] **Step 3: Regenerate and verify**
 
 ```bash
 cd "C:/dev/Next Tech Labs" && npm run sitemap && npm run build && npm run verify
 ```
 
-Expected: the sitemap reports a higher URL count than before, and **every** verifier check now PASSes.
+Expected: the sitemap reports a higher URL count than before, and **every** verifier check PASSes.
 
-- [ ] **Step 3: Confirm placeholders stayed out**
+- [ ] **Step 4: Confirm placeholders stayed out**
 
 ```bash
 cd "C:/dev/Next Tech Labs" && grep -c "/about</loc>\|/contact</loc>" public/sitemap.xml && grep -n "tidyspace/about\|password-manager/blog" public/sitemap.xml
@@ -1798,11 +1856,11 @@ cd "C:/dev/Next Tech Labs" && grep -c "/about</loc>\|/contact</loc>" public/site
 
 Expected: a count on the first command; **no output** from the second.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 cd "C:/dev/Next Tech Labs"
-git add scripts/generate-sitemap.mjs public/sitemap.xml
+git add scripts/generate-sitemap.mjs scripts/verify-routes.mjs public/sitemap.xml
 git commit -m "feat(seo): list project about and contact pages in the sitemap
 
 About pages where one is written, contact pages for shipped products only --

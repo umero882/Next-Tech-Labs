@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Container } from '@/components/ui/Container';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { company } from '@/data/company';
+import { FOOTER_SITE_LINKS } from '@/lib/nav';
 
 export function Footer() {
   return (
@@ -20,18 +21,7 @@ export function Footer() {
           </div>
 
           {/* Links */}
-          <FooterColumn
-            title="Site"
-            items={[
-              { label: 'Home', href: '/' },
-              { label: 'Products', href: '/projects' },
-              { label: 'Categories', href: '/categories' },
-              { label: 'Tech', href: '/tech' },
-              { label: 'Blog', href: '/projects/first-bite/blog' },
-              { label: 'Contact', href: '/contact' },
-              { label: 'About', href: '/about' },
-            ]}
-          />
+          <FooterColumn title="Site" items={FOOTER_SITE_LINKS} />
 
           <FooterColumn
             title="Channels"

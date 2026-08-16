@@ -236,7 +236,7 @@ export default function FirstBitePage() {
                 baby — right now.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="mt-10">
+              <motion.div id="get-the-app" variants={fadeUp} className="mt-10 scroll-mt-24">
                 <FirstBiteBadges size="lg" />
               </motion.div>
 
