@@ -24,7 +24,7 @@ link sets should not be named for only one of them.
 - **Coming-soon pages are `noindex, nofollow`** and stay out of `sitemap.xml`.
 - **Studio chrome must never link into `/projects/<id>/…`.** This is the leak the whole change exists to fix; Task 1 adds a unit test that fails if it returns.
 - **A Web3Forms access key is not a secret.** It is a public routing token that authorises only "deliver a message to this inbox". It belongs in `src/data/projects.js`, committed.
-- **Destination addresses use plus-aliases** into the existing inbox — `help+firstbite@nextechlabs.org` — so no new mailboxes are needed.
+- ~~**Destination addresses use plus-aliases** into the existing inbox — `help+firstbite@nextechlabs.org` — so no new mailboxes are needed.~~ **Corrected 2026-08-16:** this domain's mail server rejects plus-addressed recipients (`550 5.1.1 … User unknown in virtual mailbox table`). Every project uses plain `help@nextechlabs.org`; per-project routing comes from `support.formKey` only. See the spec's Addressing section.
 - **`help@nextechlabs.org` appears 39 times**, including on store-reviewed support and legal pages. Do not change any *published* address in this work; only add `support.email` values used by forms.
 - Existing route order matters: every `projects/:id/*` route must sit **above** `projects/:id` in `App.jsx`, and below the static `projects/first-bite/*` routes.
 

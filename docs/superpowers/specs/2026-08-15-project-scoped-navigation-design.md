@@ -213,10 +213,26 @@ formKey null    → mailto: the resolved support address, subject and body prefi
 Web3Forms echoes arbitrary extra fields into the email body, so `product`,
 `topic` and the source path travel with every submission.
 
-**Addressing.** Destination addresses use plus-aliases —
+**Addressing.** ~~Destination addresses use plus-aliases —
 `help+firstbite@nextechlabs.org` — which Gmail delivers to the inbox already
-being read, where a filter labels them. A product graduates to a real mailbox by
-editing one string. No new mailboxes are needed to ship this.
+being read, where a filter labels them.~~
+
+**Corrected 2026-08-16 — this was wrong.** A real submission through the shipped
+form bounced:
+
+```
+550 5.1.1 Recipient address rejected: User unknown in virtual mailbox table
+```
+
+`nextechlabs.org` resolves recipients from an explicit virtual mailbox table and
+does not expand `+` suffixes, so the plus-aliases were never real addresses. Worse,
+the failure is silent from the visitor's side — the bounce goes to the sender, so
+the form shows success while the mail dies.
+
+Every project now uses plain `help@nextechlabs.org`, and `src/lib/nav.test.js`
+asserts no project routes support mail through a plus-alias. Per-project routing
+comes from `support.formKey` alone, which is where it always belonged. Real
+per-project inboxes would need a mailbox or alias entry created server-side first.
 
 **On the key being in git.** A Web3Forms access key is a public routing token,
 not a credential: it is designed to sit in client-side HTML, it authorises
