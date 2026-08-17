@@ -18,12 +18,7 @@ import {
 import { useSeo } from '@/hooks/useSeo';
 import { posts } from '@/data/blog';
 import { BLOG_BASE, findPost, postPath, relatedPosts } from '@/lib/blog';
-import {
-  buildArticleJsonLd,
-  buildBreadcrumbJsonLd,
-  buildFaqJsonLd,
-  buildMobileAppJsonLd,
-} from '@/lib/seo';
+import { blogPostSeo } from '@/lib/routeSeo';
 import { projects } from '@/data/projects';
 import { fadeUp, stagger } from '@/lib/motion';
 
@@ -60,7 +55,7 @@ export default function BlogPostPage() {
 
   return (
     <>
-      <PostSeo post={post} app={app} path={path} />
+      <PostSeo post={post} />
 
       {/* ───────────── HEADER ───────────── */}
       <section className="relative overflow-hidden border-b border-border">
@@ -171,53 +166,10 @@ export default function BlogPostPage() {
  *
  * @param {{post: Object, app?: Object, path: string}} props
  */
-function PostSeo({ post, app, path }) {
-  const image = app?.cover?.image;
-
-  const jsonLd = [
-    buildArticleJsonLd({
-      title: post.title,
-      description: post.description,
-      path,
-      image,
-      published: post.published,
-      updated: post.updated,
-      keywords: post.keywords,
-    }),
-    buildFaqJsonLd(post.faqs),
-    buildBreadcrumbJsonLd([
-      { name: 'Home', path: '/' },
-      { name: 'First Bite', path: '/projects/first-bite' },
-      { name: 'Blog', path: BLOG_BASE },
-      { name: post.headline, path },
-    ]),
-  ];
-
-  if (app) {
-    jsonLd.push(
-      buildMobileAppJsonLd({
-        name: app.name,
-        description: app.tagline,
-        path: `/projects/${app.id}`,
-        image: app.cover?.image,
-        appStore: app.links?.appStore,
-        playStore: app.links?.playStore,
-      }),
-    );
-  }
-
-  useSeo({
-    title: `${post.title} | Next Tech Labs`,
-    description: post.description,
-    path,
-    image,
-    type: 'article',
-    keywords: post.keywords,
-    published: post.published,
-    updated: post.updated,
-    jsonLd,
-  });
-
+function PostSeo({ post }) {
+  // Same descriptor scripts/prerender.mjs bakes into the static HTML — see
+  // lib/routeSeo.js for why this lives there and not inline.
+  useSeo(blogPostSeo(post));
   return null;
 }
 

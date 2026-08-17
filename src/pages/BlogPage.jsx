@@ -11,13 +11,9 @@ import { DownloadCta } from '@/components/blog/DownloadCta';
 import { useSeo } from '@/hooks/useSeo';
 import { posts } from '@/data/blog';
 import { projects } from '@/data/projects';
-import { BLOG_BASE, postTopics, sortPostsByDate } from '@/lib/blog';
-import { buildBlogJsonLd, buildBreadcrumbJsonLd, buildMobileAppJsonLd } from '@/lib/seo';
+import { postTopics, sortPostsByDate } from '@/lib/blog';
+import { blogIndexSeo } from '@/lib/routeSeo';
 import { fadeUp, stagger } from '@/lib/motion';
-
-const TITLE = 'Baby Allergens & Starting Solids — The First Bite Blog';
-const DESCRIPTION =
-  'Evidence-based guides on introducing the Big 9 allergens, starting solids, and spotting a reaction — from the team behind the First Bite app for iOS and Android.';
 
 export default function BlogPage() {
   const ordered = sortPostsByDate(posts);
@@ -25,41 +21,7 @@ export default function BlogPage() {
   const topics = postTopics(ordered);
   const app = projects.find((p) => p.id === 'first-bite');
 
-  useSeo({
-    title: `${TITLE} | Next Tech Labs`,
-    description: DESCRIPTION,
-    path: BLOG_BASE,
-    image: app?.cover?.image,
-    keywords: [
-      'baby allergen introduction',
-      'starting solids',
-      'baby food allergy',
-      'first bite app',
-      'baby led weaning',
-    ],
-    jsonLd: [
-      buildBlogJsonLd({
-        path: BLOG_BASE,
-        name: TITLE,
-        description: DESCRIPTION,
-        posts: ordered,
-      }),
-      buildBreadcrumbJsonLd([
-        { name: 'Home', path: '/' },
-        { name: 'First Bite', path: '/projects/first-bite' },
-      { name: 'Blog', path: BLOG_BASE },
-      ]),
-      app &&
-        buildMobileAppJsonLd({
-          name: app.name,
-          description: app.tagline,
-          path: `/projects/${app.id}`,
-          image: app.cover?.image,
-          appStore: app.links?.appStore,
-          playStore: app.links?.playStore,
-        }),
-    ],
-  });
+  useSeo(blogIndexSeo());
 
   return (
     <>

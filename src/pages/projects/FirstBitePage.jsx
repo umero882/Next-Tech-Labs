@@ -24,7 +24,7 @@ import { StoreBadges } from '@/components/ui/StoreBadges';
 import { useSeo } from '@/hooks/useSeo';
 import { posts } from '@/data/blog';
 import { BLOG_BASE, formatPostDate, postPath, sortPostsByDate } from '@/lib/blog';
-import { buildBreadcrumbJsonLd, buildMobileAppJsonLd } from '@/lib/seo';
+import { firstBiteSeo } from '@/lib/routeSeo';
 import { fadeUp, stagger } from '@/lib/motion';
 
 const ASSET = (n) => `/projects/first-bite/${n}`;
@@ -134,36 +134,7 @@ const stack = [
 export default function FirstBitePage() {
   const guides = sortPostsByDate(posts.filter((p) => p.app === 'first-bite')).slice(0, 3);
 
-  useSeo({
-    title: 'First Bite — Baby Allergen Introduction & First Foods App | Next Tech Labs',
-    description:
-      'First Bite is a free iOS and Android app for evidence-based allergen introduction: Big 9 protocols, an AI label scanner, caregiver sync, and a clinician-ready reaction log.',
-    path: '/projects/first-bite',
-    image: '/projects/first-bite-icon.png',
-    keywords: [
-      'baby allergen introduction app',
-      'food allergy tracker for babies',
-      'baby first foods app',
-      'allergen introduction tracker',
-      'first bite app',
-    ],
-    jsonLd: [
-      buildMobileAppJsonLd({
-        name: 'First Bite',
-        description:
-          'Evidence-based early-allergen introduction, maintenance tracking, an AI food-label safety scanner, and multi-caregiver sync for a baby\'s first 1,000 days.',
-        path: '/projects/first-bite',
-        image: '/projects/first-bite-icon.png',
-        appStore: APP_STORE_URL,
-        playStore: PLAY_STORE_URL,
-      }),
-      buildBreadcrumbJsonLd([
-        { name: 'Home', path: '/' },
-        { name: 'Projects', path: '/projects' },
-        { name: 'First Bite', path: '/projects/first-bite' },
-      ]),
-    ],
-  });
+  useSeo(firstBiteSeo());
 
   return (
     <>

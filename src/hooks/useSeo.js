@@ -100,6 +100,14 @@ export function useSeo(seo) {
     meta('twitter:description', description);
     meta('twitter:image', img);
 
+    // Drop any structured data baked in by scripts/prerender.mjs before adding
+    // ours. Without this a prerendered route ends up with both copies once React
+    // mounts. Removal is permanent — from here on the hook owns the head — so it
+    // is deliberately not pushed onto the undo stack.
+    document.head
+      .querySelectorAll('script[type="application/ld+json"][data-prerendered]')
+      .forEach((el) => el.remove());
+
     jsonLd.filter(Boolean).forEach((block, i) => {
       const script = document.createElement('script');
       script.type = 'application/ld+json';

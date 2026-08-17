@@ -111,5 +111,51 @@ for (const path of SITEMAP_FORBIDDEN) {
   check(!sitemap.includes(`<loc>https://nextechlabs.org${path}</loc>`), `sitemap omits ${path}`);
 }
 
+// ── prerendered head metadata ───────────────────────────────
+// The whole point of the prerender is that a crawler which never runs JS reads
+// real per-route tags. Assert that on the built artefact, not on intent.
+const { prerenderRoutes } = await import('../src/lib/routeSeo.js');
+
+for (const route of prerenderRoutes()) {
+  const file = join(distDir, route.path, 'index.html');
+  let html = '';
+  try {
+    html = readFileSync(file, 'utf8');
+  } catch {
+    check(false, `prerendered ${route.path}/index.html exists`);
+    continue;
+  }
+
+  const expectedTitle = route.seo.title;
+  const expectedCanonical = `https://nextechlabs.org${route.path}`;
+  const ldCount = (html.match(/application\/ld\+json/g) || []).length;
+  const expectedLd = (route.seo.jsonLd || []).filter(Boolean).length;
+
+  check(
+    html.includes(`<title>${expectedTitle.replace(/&/g, '&amp;')}</title>`),
+    `prerendered ${route.path} carries its own <title>`,
+  );
+  check(
+    html.includes(`<link rel="canonical" href="${expectedCanonical}" />`),
+    `prerendered ${route.path} canonical points at itself`,
+  );
+  check(
+    ldCount === expectedLd,
+    `prerendered ${route.path} has ${expectedLd} ld+json block(s) (found ${ldCount})`,
+  );
+  check(
+    html.includes('data-prerendered="1"'),
+    `prerendered ${route.path} marks its ld+json so useSeo can replace it`,
+  );
+  check(
+    html.includes('<div id="root"></div>'),
+    `prerendered ${route.path} still boots the SPA`,
+  );
+  check(
+    !html.includes('Next Tech Labs — software, shipped.'),
+    `prerendered ${route.path} dropped the site-wide default title`,
+  );
+}
+
 console.log(failures === 0 ? '\nall checks passed' : `\n${failures} check(s) FAILED`);
 process.exit(failures === 0 ? 0 : 1);
