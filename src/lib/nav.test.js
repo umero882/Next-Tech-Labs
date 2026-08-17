@@ -101,7 +101,23 @@ test('the app CTA appears only where there is an app to get', () => {
 });
 
 test('support falls back to the studio inbox until a project declares its own', () => {
-  assert.equal(resolveSupport(firstBite).email, 'help+firstbite@nextechlabs.org');
+  assert.equal(resolveSupport(firstBite).email, 'help@nextechlabs.org');
   assert.equal(resolveSupport(tidyspace).email, company.channels.email);
   assert.equal(resolveSupport(tidyspace).formKey, null);
+});
+
+test('no project routes support mail to a plus-alias', () => {
+  // help+firstbite@nextechlabs.org bounced on 2026-08-16:
+  //   550 5.1.1 Recipient address rejected: User unknown in virtual mailbox table
+  // This domain resolves recipients from an explicit virtual mailbox table and
+  // does not expand plus-addressing, so a help+<x>@ address silently loses mail
+  // -- no bounce the visitor ever sees. Per-project routing belongs to
+  // support.formKey, not the address.
+  for (const project of projects) {
+    const { email } = resolveSupport(project);
+    assert.ok(
+      !email.includes('+'),
+      `${project.id} routes support mail to ${email}; plus-aliases do not deliver on this domain`,
+    );
+  }
 });

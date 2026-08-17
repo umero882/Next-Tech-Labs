@@ -198,7 +198,8 @@ export const projects = [
       playStore: 'https://play.google.com/store/apps/details?id=com.umero882.passwordvault',
     },
     site: { blog: false, about: false },
-    support: { email: 'help+passwordmanager@nextechlabs.org', formKey: null },
+    // Plain help@ deliberately — see the note on First Bite's support block below.
+    support: { email: 'help@nextechlabs.org', formKey: null },
     featured: true,
     cover: { type: 'image', image: '/projects/password-manager.png', size: 'contain' },
   },
@@ -228,7 +229,14 @@ export const projects = [
     },
     site: { blog: true, about: true },
     support: {
-      email: 'help+firstbite@nextechlabs.org',
+      // Do NOT use a plus-alias here. Tested 2026-08-16:
+      // help+firstbite@nextechlabs.org bounced with
+      //   550 5.1.1 Recipient address rejected: User unknown in virtual mailbox table
+      // This domain's mail server resolves recipients from an explicit virtual
+      // mailbox table and does not expand plus-addressing, so any help+<x>@
+      // address is dead until a real mailbox or alias entry is created for it.
+      // Per-project routing is meant to come from formKey below, not the address.
+      email: 'help@nextechlabs.org',
       // Web3Forms access key — a public routing token, not a credential. It
       // authorises exactly one thing: deliver a message to the address above.
       // Null until the key is created; the form falls back to mailto meanwhile.
