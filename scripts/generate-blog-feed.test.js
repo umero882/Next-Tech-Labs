@@ -11,7 +11,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { buildFeed, bodyOf, isoDate } from './generate-blog-feed.mjs';
+import { buildFeed, bodyOf, isoDate, tagsOf } from './generate-blog-feed.mjs';
 
 const post = (over = {}) => ({
   slug: 'a-post',
@@ -107,4 +107,35 @@ test('the fields blog-to-social selects are all present', () => {
   ]) {
     assert.ok(field in item, `feed is missing ${field}`);
   }
+});
+
+test('tags are labels, not the search phrases keywords holds', () => {
+  // A consumer turning these into hashtags produced
+  // #whentointroducepeanutbuttertobaby, which reads as spam and is followed
+  // by nobody. Only something short enough to be a label is a tag.
+  const tags = tagsOf(
+    post({
+      topic: 'Allergen introduction',
+      keywords: ['when to introduce peanut butter to baby', 'peanut allergy', 'weaning'],
+    }),
+  );
+  assert.deepEqual(tags, ['Allergen introduction', 'peanut allergy', 'weaning']);
+});
+
+test('the topic is always a tag, even with no usable keywords', () => {
+  assert.deepEqual(tagsOf(post({ topic: 'Starting solids', keywords: ['a b c d'] })), [
+    'Starting solids',
+  ]);
+});
+
+test('a topic repeated in the keywords is not tagged twice', () => {
+  assert.deepEqual(tagsOf(post({ topic: 'weaning', keywords: ['weaning'] })), ['weaning']);
+});
+
+test('keywords survive in full under their own name', () => {
+  const [item] = buildFeed([
+    post({ keywords: ['when to introduce peanut butter to baby', 'weaning'] }),
+  ]).posts;
+  assert.deepEqual(item.keywords, ['when to introduce peanut butter to baby', 'weaning']);
+  assert.ok(!item.tags.includes('when to introduce peanut butter to baby'));
 });

@@ -63,6 +63,22 @@ export function bodyOf(post) {
   return lines.join('\n');
 }
 
+/**
+ * Tags, which are not the same thing as keywords.
+ *
+ * `keywords` are long-tail search phrases — "when to introduce peanut butter to
+ * baby". A consumer that turns tags into hashtags produces
+ * #whentointroducepeanutbuttertobaby from that: unreadable, unfollowed, and it
+ * reads as spam. Only a phrase short enough to be a label is a tag, so anything
+ * over two words is left to `keywords`, where it belongs.
+ *
+ * The topic leads, because it is the one label every post is guaranteed to have.
+ */
+export function tagsOf(post) {
+  const short = (post.keywords || []).filter((k) => k.trim().split(/\s+/).length <= 2);
+  return [...new Set([post.topic, ...short].filter(Boolean))];
+}
+
 /** The feed as a value, so a test can check it without writing a file. */
 export function buildFeed(all = posts) {
   const items = all
@@ -74,7 +90,10 @@ export function buildFeed(all = posts) {
       description: post.description,
       category: post.topic || '',
       audience: 'parents',
-      tags: post.keywords || [],
+      tags: tagsOf(post),
+      // The full search phrases stay, under the name that describes them. They
+      // are for anything doing SEO work; they are not tags.
+      keywords: post.keywords || [],
       published_at: isoDate(post.published),
       updated_at: post.updated ? isoDate(post.updated) : null,
       url: `${SITE}${BLOG_PATH}/${post.slug}`,
