@@ -14,24 +14,26 @@
     "preview": "vite preview --host",
     "test": "node --test",
     "verify": "node scripts/verify-routes.mjs",
-    "feed": "node scripts/generate-blog-feed.mjs"
+    "feed": "node scripts/generate-blog-feed.mjs",
+    "covers": "node tools/blog-covers/generate.mjs"
   },
   "dependencies": {
+    "clsx": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
     "react-router-dom": "latest",
-    "framer-motion": "latest",
-    "lucide-react": "latest",
     "react-window": "latest",
-    "use-debounce": "latest",
-    "clsx": "latest",
-    "tailwind-merge": "latest"
+    "tailwind-merge": "latest",
+    "use-debounce": "latest"
   },
   "devDependencies": {
-    "vite": "latest",
+    "@tailwindcss/vite": "latest",
     "@vitejs/plugin-react": "latest",
+    "sharp": "^0.35.3",
     "tailwindcss": "latest",
-    "@tailwindcss/vite": "latest"
+    "vite": "latest"
   },
   "engines": {
     "node": ">=20.19"

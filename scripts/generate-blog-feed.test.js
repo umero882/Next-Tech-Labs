@@ -11,7 +11,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { buildFeed, bodyOf, isoDate, tagsOf } from './generate-blog-feed.mjs';
+import { buildFeed, bodyOf, coverFor, isoDate, tagsOf } from './generate-blog-feed.mjs';
 
 const post = (over = {}) => ({
   slug: 'a-post',
@@ -138,4 +138,30 @@ test('keywords survive in full under their own name', () => {
   ]).posts;
   assert.deepEqual(item.keywords, ['when to introduce peanut butter to baby', 'weaning']);
   assert.ok(!item.tags.includes('when to introduce peanut butter to baby'));
+});
+
+test('a post with a drawn cover gets its URL, hashed against the bytes', () => {
+  const read = () => Buffer.from('some image bytes');
+  const url = coverFor('a-post', '/covers', read);
+  assert.match(url, /^https:\/\/nextechlabs\.org\/projects\/first-bite\/blog\/covers\/a-post\.webp\?v=[0-9a-f]{8}$/);
+});
+
+test('the same image always gets the same URL', () => {
+  // Meta caches an image against its URL. Stamping the time would bust that
+  // cache on every rebuild; hashing the bytes busts it only on a redraw.
+  const read = () => Buffer.from('identical');
+  assert.equal(coverFor('a-post', '/covers', read), coverFor('a-post', '/covers', read));
+});
+
+test('a redrawn image gets a different URL', () => {
+  const before = coverFor('a-post', '/covers', () => Buffer.from('first version'));
+  const after = coverFor('a-post', '/covers', () => Buffer.from('second version'));
+  assert.notEqual(before, after);
+});
+
+test('a post with no cover drawn yet reports null, not a stand-in', () => {
+  const missing = () => {
+    throw Object.assign(new Error('ENOENT'), { code: 'ENOENT' });
+  };
+  assert.equal(coverFor('a-post', '/covers', missing), null);
 });

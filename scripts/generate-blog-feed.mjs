@@ -21,7 +21,8 @@
  * Regenerate after adding or editing a post:
  *   node scripts/generate-blog-feed.mjs
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
@@ -33,6 +34,7 @@ const BLOG_PATH = `/projects/${APP}/blog`;
 
 const here = dirname(fileURLToPath(import.meta.url));
 const outDir = resolve(here, `../public/projects/${APP}/blog`);
+const coverDir = resolve(outDir, 'covers');
 const outFile = resolve(outDir, 'feed.json');
 
 /**
@@ -79,6 +81,30 @@ export function tagsOf(post) {
   return [...new Set([post.topic, ...short].filter(Boolean))];
 }
 
+/**
+ * The cover for a post, or null if it has not been drawn.
+ *
+ * Covers are files in the repo named after the slug — `tools/blog-covers`
+ * writes them — so nothing has to record which posts have one. The `.webp` is
+ * what the page should load; a consumer that needs a JPEG swaps the extension,
+ * because a `.jpg` is written beside every `.webp`.
+ *
+ * The query string is a hash of the file's own bytes. Facebook and Instagram
+ * cache an image against its URL and are slow to look again, so a redrawn cover
+ * would keep sharing as the old picture forever without one. Hashing the
+ * content rather than stamping the time means the URL is stable across
+ * checkouts and rebuilds, and changes exactly when the picture does.
+ */
+export function coverFor(slug, dir = coverDir, read = readFileSync) {
+  try {
+    const bytes = read(resolve(dir, `${slug}.webp`));
+    const v = createHash('sha1').update(bytes).digest('hex').slice(0, 8);
+    return `${SITE}${BLOG_PATH}/covers/${slug}.webp?v=${v}`;
+  } catch {
+    return null;
+  }
+}
+
 /** The feed as a value, so a test can check it without writing a file. */
 export function buildFeed(all = posts) {
   const items = all
@@ -97,11 +123,11 @@ export function buildFeed(all = posts) {
       published_at: isoDate(post.published),
       updated_at: post.updated ? isoDate(post.updated) : null,
       url: `${SITE}${BLOG_PATH}/${post.slug}`,
-      // No per-post artwork exists yet. Explicitly null rather than falling
-      // back to the app icon: a consumer that needs a real image must be able
-      // to tell there isn't one, instead of publishing the same icon under
-      // every article. Instagram refuses PNG and requires a JPEG per post.
-      cover_image_url: null,
+      // null when the post has no cover drawn yet — never the site's og:image,
+      // which is one app icon shared by every page and a PNG besides, which
+      // Instagram refuses. A consumer has to be able to tell there is no
+      // artwork rather than be handed something that only looks like some.
+      cover_image_url: coverFor(post.slug),
       body_md: bodyOf(post),
     }));
 
