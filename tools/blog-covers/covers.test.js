@@ -89,7 +89,13 @@ test('the safety rules reach the art director as well as the camera', () => {
 test('no text, and no identifiable child', () => {
   const prompt = coverPrompt({ setting: 's', action: 'a' }, post());
   assert.ok(prompt.includes('NO text of any kind'));
-  assert.ok(prompt.includes('No child is identifiable'));
+  // Asserted case-insensitively and on the idea rather than one sentence: the
+  // first version of this rule was a single line, the model ignored it and
+  // returned a sharp front-on portrait of a baby, and the fix was to say it
+  // three ways. A test that pins the exact wording would have blocked that fix.
+  const lower = prompt.toLowerCase();
+  assert.ok(lower.includes('no child is identifiable'));
+  assert.ok(lower.includes('never faces the camera'));
 });
 
 test('the brief tells the next article what is already taken', () => {

@@ -38,7 +38,9 @@ const RULES = [
   'No words, letters, numbers, signage, logos, watermarks, product labels, jar labels, packaging, handwriting, screens showing text, or charts with writing.',
   'If a label, chart, screen or paper appears in the scene, it is blank.',
   // The child, protected.
-  'No child is identifiable: an infant is seen from behind, at an angle, in profile, cropped at the shoulders, or softly out of focus. Adults are shown the same way — hands, torso, or a face turned away.',
+  'CRITICAL: no child is identifiable. An infant is seen from behind, over the shoulder, cropped at the chin, or thrown softly out of focus.',
+  'A baby NEVER faces the camera. No front-on portrait of an infant, no sharp focus on an infant face, no eye contact with the lens. If the baby is the nearest thing to the camera, it is the back of the head.',
+  'The same for adults: hands, forearms, torso, or a face turned away or cropped. Hands are the preferred subject.',
   'Hands doing the work are welcome as the main subject; a close crop on hands and food is often the better picture.',
   'No brand names, no packaging, no medical logos, no national flags.',
   'Not a studio. No seamless white background, no perfectly styled flat-lay, no laughing-baby stock cliché.',
