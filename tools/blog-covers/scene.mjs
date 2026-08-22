@@ -37,9 +37,20 @@ contradicts the article it sits above, and is read by people who never scroll
 further than the picture.
 
 NEVER in frame, in any scene:
-- Whole or chopped nuts, whole grapes, popcorn, raw carrot or apple chunks,
-  cherry tomatoes whole, or any firm round food. Every one is a choking hazard
-  for an infant and several of these articles say so explicitly.
+- Whole or chopped nuts, whole grapes, popcorn, cherry tomatoes, or any firm
+  round food. Every one is a choking hazard for an infant and several of these
+  articles say so explicitly.
+- RAW HARD VEGETABLE OR FRUIT IN ANY SHAPE. Not chunks, not coins, not sticks,
+  not batons, not crudites — raw carrot especially, in any form at all. A model
+  told "no raw carrot chunks" will put raw carrot batons on the plate and
+  consider the instruction met; it is the same hazard in a different shape.
+  NO CARROT AT ALL, in any preparation. Steamed carrot batons are perfectly good
+  baby food, but a photograph cannot show "steamed" — three drafts in a row came
+  back with carrot sticks that could equally be raw, and a reader cannot tell
+  either. On this subject an unverifiable food is a wrong food.
+  Use food that is self-evidently soft instead: avocado, ripe banana, roasted
+  sweet potato, cooked pear, soft-cooked courgette, flaked fish. If a viewer
+  cannot see that it squashes, do not put it in the frame.
 - A thick blob or full spoonful of nut butter. It is given thinned and spread
   thinly; the thick version is the hazard the peanut article warns about.
 - Honey, in any form, anywhere near an infant. Botulism risk under one year.

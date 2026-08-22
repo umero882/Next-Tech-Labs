@@ -31,6 +31,8 @@ const STYLE = [
   // crops to 3:2 afterwards — so the useful instruction is about where the
   // subject sits, not what shape to draw.
   'Compose for a wide crop: keep the subject and the action in the middle horizontal band, nothing important in the top or bottom fifth.',
+  'The FOOD is the subject and must be fully visible and the largest thing in the frame. Shoot down onto the work surface, or across it at food level.',
+  'Never frame a standing adult with the work happening below the bottom edge — a torso with the food cropped out is a failed photograph for this blog, whatever else is right about it.',
 ].join(' ');
 
 const RULES = [
