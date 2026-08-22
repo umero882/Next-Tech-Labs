@@ -1,0 +1,102 @@
+{
+  "site": "https://nextechlabs.org",
+  "blog": "https://nextechlabs.org/projects/first-bite/blog",
+  "count": 5,
+  "posts": [
+    {
+      "slug": "when-to-introduce-peanut-butter-to-baby",
+      "title": "When to Introduce Peanut Butter to a Baby — Safely, Step by Step",
+      "description": "Guidelines now say early is safer than late. Here is when to start peanut, how much counts as a serving, and how to keep it in the diet so tolerance holds.",
+      "category": "Allergen introduction",
+      "audience": "parents",
+      "tags": [
+        "when to introduce peanut butter to baby",
+        "peanut introduction 6 months",
+        "baby peanut allergy prevention",
+        "LEAP study peanut",
+        "NIAID peanut guidelines"
+      ],
+      "published_at": "2026-07-06T00:00:00Z",
+      "updated_at": "2026-08-11T00:00:00Z",
+      "url": "https://nextechlabs.org/projects/first-bite/blog/when-to-introduce-peanut-butter-to-baby",
+      "cover_image_url": null,
+      "body_md": "Guidelines now say early is safer than late. Here is when to start peanut, how much counts as a serving, and how to keep it in the diet so tolerance holds.\n\n- For most babies, peanut goes in at around 6 months — once solids are established, not before.\n- Severe eczema or a known egg allergy changes the plan: get a pediatrician or allergist involved first.\n- Thinned peanut butter or peanut puffs. Never whole nuts or a thick blob of peanut butter — both are choking hazards.\n- Introduction is not the finish line. Peanut has to stay in the diet roughly weekly for tolerance to hold."
+    },
+    {
+      "slug": "baby-allergen-introduction-schedule",
+      "title": "The Big 9 Allergen Introduction Schedule for Babies",
+      "description": "A week-by-week order for introducing the nine major food allergens to your baby, how long to wait between them, and why maintenance matters more than the order.",
+      "category": "Allergen introduction",
+      "audience": "parents",
+      "tags": [
+        "baby allergen introduction schedule",
+        "big 9 allergens babies",
+        "order to introduce allergens to baby",
+        "how long to wait between new foods baby",
+        "allergen introduction chart"
+      ],
+      "published_at": "2026-07-14T00:00:00Z",
+      "updated_at": "2026-08-11T00:00:00Z",
+      "url": "https://nextechlabs.org/projects/first-bite/blog/baby-allergen-introduction-schedule",
+      "cover_image_url": null,
+      "body_md": "A week-by-week order for introducing the nine major food allergens to your baby, how long to wait between them, and why maintenance matters more than the order.\n\n- There is no medically required order. Start with the two that carry the most evidence — peanut and egg — then work through the rest.\n- One new allergen at a time, with a 3-to-5 day watch window before the next one.\n- Introduce in the morning, at home, when you are not rushing out the door.\n- Nine allergens at one new food every few days is roughly a 6-to-8 week project, not a weekend."
+    },
+    {
+      "slug": "starting-solids-first-foods-for-baby",
+      "title": "Starting Solids: What to Feed a 6-Month-Old in the First Month",
+      "description": "Readiness signs, what to serve in weeks one to four, textures by age, and the foods to keep off the tray entirely. A calm plan for a baby's first month of solids.",
+      "category": "Starting solids",
+      "audience": "parents",
+      "tags": [
+        "baby first foods 6 months",
+        "starting solids schedule",
+        "signs baby is ready for solids",
+        "what to feed a 6 month old",
+        "first foods for baby"
+      ],
+      "published_at": "2026-07-23T00:00:00Z",
+      "updated_at": "2026-08-12T00:00:00Z",
+      "url": "https://nextechlabs.org/projects/first-bite/blog/starting-solids-first-foods-for-baby",
+      "cover_image_url": null,
+      "body_md": "Readiness signs, what to serve in weeks one to four, textures by age, and the foods to keep off the tray entirely. A calm plan for a baby's first month of solids.\n\n- Around 6 months, and readiness is behaviour, not a birthday: steady head control, sitting with support, reaching for food.\n- Milk stays the main source of nutrition through the first year. Solids are practice and exposure.\n- Iron-rich foods first — meat, lentils, fortified cereal — because a baby's own iron stores are running low by 6 months.\n- No honey before 12 months, no whole nuts, no cow's milk as a drink, no added salt or sugar."
+    },
+    {
+      "slug": "signs-of-food-allergy-in-babies",
+      "title": "Signs of a Food Allergy Reaction in Babies — and What to Do",
+      "description": "How to tell a mild reaction from an emergency, the timing that separates allergy from intolerance, and the exact steps to take when a baby reacts to a new food.",
+      "category": "Reactions",
+      "audience": "parents",
+      "tags": [
+        "signs of food allergy in babies",
+        "baby allergic reaction symptoms",
+        "infant anaphylaxis signs",
+        "baby hives after eating",
+        "food allergy vs intolerance baby"
+      ],
+      "published_at": "2026-08-01T00:00:00Z",
+      "updated_at": "2026-08-12T00:00:00Z",
+      "url": "https://nextechlabs.org/projects/first-bite/blog/signs-of-food-allergy-in-babies",
+      "cover_image_url": null,
+      "body_md": "How to tell a mild reaction from an emergency, the timing that separates allergy from intolerance, and the exact steps to take when a baby reacts to a new food.\n\n- Most immediate allergic reactions start within minutes and almost always within two hours of eating.\n- Breathing difficulty, swelling of the lips or tongue, repeated vomiting, pallor, or floppiness means emergency services now — not a phone call to the clinic.\n- Hives around the mouth alone, right where a wet food touched the skin, is often contact irritation rather than a true allergy.\n- Photograph and log the reaction while it is happening. Memory two weeks later is not evidence an allergist can use."
+    },
+    {
+      "slug": "baby-led-weaning-vs-purees",
+      "title": "Baby-Led Weaning vs Purées: What the Evidence Actually Says",
+      "description": "Choking risk, iron intake, allergen exposure, and mess. An evidence-based comparison of baby-led weaning and spoon-feeding — and why most families end up doing both.",
+      "category": "Starting solids",
+      "audience": "parents",
+      "tags": [
+        "baby led weaning vs purees",
+        "is baby led weaning safe",
+        "baby led weaning choking risk",
+        "blw vs spoon feeding",
+        "baby led weaning first foods"
+      ],
+      "published_at": "2026-08-08T00:00:00Z",
+      "updated_at": "2026-08-12T00:00:00Z",
+      "url": "https://nextechlabs.org/projects/first-bite/blog/baby-led-weaning-vs-purees",
+      "cover_image_url": null,
+      "body_md": "Choking risk, iron intake, allergen exposure, and mess. An evidence-based comparison of baby-led weaning and spoon-feeding — and why most families end up doing both.\n\n- Controlled studies have not found baby-led weaning to raise choking risk when foods are prepared to safe shapes and sizes.\n- Purées make iron intake easier to guarantee early on; finger foods build self-regulation and oral-motor skill.\n- Allergen introduction works with either method. Allergens are about exposure and frequency, not texture.\n- Gagging is loud, noisy, and normal. Choking is quiet. Learn the difference before the first meal."
+    }
+  ]
+}
