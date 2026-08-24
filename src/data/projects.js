@@ -245,6 +245,50 @@ export const projects = [
     featured: true,
     cover: { type: 'image', image: '/projects/first-bite-icon.png', size: 'contain' },
   },
+  {
+    id: 'sunnah-habit-tracker',
+    code: 'P-20',
+    name: 'Sunnah Habit Tracker',
+    tagline: "Sunnah habits, prayer times, Qur'an, and a Qa'idah course that listens back.",
+    description:
+      "A bilingual iOS and Android app for building consistent Sunnah practice. Daily habits carry streaks and XP; the five prayers are tracked against prayer times computed on the device; a full Qur'an reader ships 24 reciters with per-ayah audio; and a 25-module Qa'idah and Tajweed course listens to recorded recitation and tells the learner what it heard. Built on an Expo SDK 57 pnpm monorepo — SuperTokens auth, a Hasura GraphQL graph over PostgreSQL, offline-first check-ins through a durable mutation queue, and English/Arabic with full RTL from the first commit.",
+    category: 'mobile',
+    status: 'beta',
+    year: 2026,
+    client: 'Internal — NextechLabs',
+    stack: [
+      'Expo SDK 57',
+      'React Native',
+      'TypeScript',
+      'NativeWind',
+      'SuperTokens',
+      'Hasura GraphQL',
+      'PostgreSQL',
+      'TanStack Query',
+      'Zustand',
+      'adhan',
+      'Sentry',
+    ],
+    highlights: [
+      'Prayer times computed on-device with adhan — per-user calculation method, GPS with a Mecca fallback, and a five-prayer row that cycles on-time / late / missed',
+      'Offline-first check-ins: optimistic updates over a durable mutation queue that replays every write when the connection returns',
+      "Qa'idah & Tajweed course — 25 modules, 51 lessons, 29 letters, with spaced repetition, a guardian area, and recorded-recitation practice",
+      'The pronunciation listener is never told the expected answer — the model transcribes, the server judges, and a low-confidence result says "couldn\'t tell" rather than praising silence',
+      'Ask answers from a curated corpus of 500+ verses, graded hadith, duas, and lessons — it cites every source and returns "not covered" instead of inventing one',
+      "Qur'an reader with 24 reciters, background audio that survives a locked screen, switchable translations, and continue-where-you-left-off",
+      'English and Arabic with full RTL, and a WCAG AA contrast floor enforced as a unit test',
+      'In closed testing on both stores — App Store Connect record live, Android closed-testing track submitted',
+    ],
+    links: {},
+    support: {
+      // The address the app's own legal site and store listings already publish.
+      // Different domain from First Bite's help@nextechlabs.org on purpose.
+      email: 'support@nextechlabs.tech',
+      formKey: null,
+    },
+    featured: true,
+    cover: { type: 'image', image: '/projects/sunnah-habit-tracker-icon.png', size: 'contain' },
+  },
 
   // ────────────────────────────────────────────────────────
   // TIER 3 — BREADTH

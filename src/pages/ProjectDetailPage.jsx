@@ -16,6 +16,7 @@ import { fadeUp, stagger } from '@/lib/motion';
 const customPages = {
   'password-manager': lazy(() => import('@/pages/projects/PasswordManagerPage')),
   'first-bite': lazy(() => import('@/pages/projects/FirstBitePage')),
+  'sunnah-habit-tracker': lazy(() => import('@/pages/projects/SunnahHabitTrackerPage')),
 };
 
 export default function ProjectDetailPage() {

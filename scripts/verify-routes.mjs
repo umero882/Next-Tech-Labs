@@ -47,6 +47,7 @@ const SITEMAP_REQUIRED = [
   '/projects/first-bite/blog',
   '/projects/first-bite/about',
   '/projects/first-bite/contact',
+  '/projects/sunnah-habit-tracker',
 ];
 
 /** Paths the sitemap must never list — placeholders and noindex pages. */

@@ -33,8 +33,19 @@ export function firstBiteApp() {
   return projects.find((p) => p.id === 'first-bite');
 }
 
-/** MobileApplication JSON-LD for a project, or null when it isn't store-listed. */
-function appJsonLd(app) {
+/** The Sunnah Habit Tracker project entry — the source of truth for its icon. */
+export function sunnahHabitApp() {
+  return projects.find((p) => p.id === 'sunnah-habit-tracker');
+}
+
+/**
+ * MobileApplication JSON-LD for a project, or null when the entry is missing.
+ *
+ * @param {Object} app Entry from `data/projects.js`.
+ * @param {string} [category] schema.org applicationCategory; defaults to the
+ *   builder's own, which is tuned for First Bite.
+ */
+function appJsonLd(app, category) {
   if (!app) return null;
   return buildMobileAppJsonLd({
     name: app.name,
@@ -43,6 +54,7 @@ function appJsonLd(app) {
     image: app.cover?.image,
     appStore: app.links?.appStore,
     playStore: app.links?.playStore,
+    category,
   });
 }
 
@@ -76,6 +88,33 @@ export function firstBiteSeo() {
         { name: 'Home', path: '/' },
         { name: 'Projects', path: '/projects' },
         { name: 'First Bite', path: '/projects/first-bite' },
+      ]),
+    ],
+  };
+}
+
+/** `/projects/sunnah-habit-tracker` — the app showcase page. */
+export function sunnahHabitSeo() {
+  const app = sunnahHabitApp();
+  return {
+    title: `Sunnah Habit Tracker — Islamic Habit, Prayer Times & Qur'an App${SUFFIX}`,
+    description:
+      "Sunnah Habit Tracker is a free iOS and Android app for daily Sunnah practice: habit streaks, on-device prayer times, the full Qur'an with 24 reciters, and a Qa'idah and Tajweed course that listens to your recitation.",
+    path: '/projects/sunnah-habit-tracker',
+    image: '/projects/sunnah-habit-tracker-icon.png',
+    keywords: [
+      'islamic habit tracker app',
+      'sunnah habit tracker',
+      'prayer times habit app',
+      "qa'idah and tajweed app",
+      "qur'an reader with reciters",
+    ],
+    jsonLd: [
+      appJsonLd(app, 'LifestyleApplication'),
+      buildBreadcrumbJsonLd([
+        { name: 'Home', path: '/' },
+        { name: 'Projects', path: '/projects' },
+        { name: 'Sunnah Habit Tracker', path: '/projects/sunnah-habit-tracker' },
       ]),
     ],
   };
@@ -158,6 +197,7 @@ export function blogPostSeo(post) {
 export function prerenderRoutes() {
   return [
     { path: '/projects/first-bite', seo: firstBiteSeo() },
+    { path: '/projects/sunnah-habit-tracker', seo: sunnahHabitSeo() },
     { path: BLOG_BASE, seo: blogIndexSeo() },
     ...posts.map((p) => ({ path: postPath(p.slug), seo: blogPostSeo(p) })),
   ];

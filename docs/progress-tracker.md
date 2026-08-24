@@ -10,7 +10,7 @@
 | Metric | Value |
 |---|---|
 | Phase | M3 — Distribution |
-| Last updated | 2026-08-15 |
+| Last updated | 2026-08-24 |
 | Next milestone | Submit `sitemap.xml` to Google Search Console + Bing |
 | Live URL | https://nextechlabs.org |
 | Lighthouse (Mobile) | _not measured yet — capture on first deploy_ |
@@ -64,6 +64,15 @@ _Move items here when started, move out when done._
 ---
 
 ## Done log
+
+### 2026-08-24
+- ✅ **Added Sunnah Habit Tracker (`sunnah-habit-tracker`, P-20) to `data/projects.js`** — Islamic habit-building app, `mobile` category, `beta`, featured. Sourced from the repo at `C:\dev\Projects\Sunnah Habit Tracker` (README phase log, `docs/PRD.md`, `docs/RELEASE.md`, `docs/RELEASE_NOTES.md`, `apps/mobile/app.json`, 279 commits) — every number on the page comes from that tree or from the app's own screens, none from guesswork.
+- ✅ **Built the showcase page** (`pages/projects/SunnahHabitTrackerPage.jsx`, registered in `ProjectDetailPage` customPages) — hero, a six-tile screen band, six-feature grid, three deep dives (the recitation listener, the cited-answer Ask, the progress tab), an integrity dossier, a free-with-known-limits section, build spec, legal row, CTA. Mirrors the First Bite page pattern and reuses `StoreBadges`, `PhoneFrame`-style framing, `SectionLabel`, `StatusDot`, `Badge`.
+- ✅ **Ten real marketing screenshots** copied to `public/projects/sunnah-habit-tracker/` (onboarding, home, prayers, habits, progress, learn, profile, qa'idah, recite, qur'an) plus a 512×512 app icon at `public/projects/sunnah-habit-tracker-icon.png` (107 KB, resized from the app's 1.6 MB `icon.png` with sharp). All ten are used on the page — no dead assets.
+- ✅ **SEO**: `sunnahHabitSeo()` in `lib/routeSeo.js`, added to `prerenderRoutes()`, so the route now bakes its own title, canonical, OG/Twitter and 2 JSON-LD blocks into static HTML. `appJsonLd()` takes an optional `applicationCategory` — Sunnah is `LifestyleApplication`, First Bite keeps the `HealthApplication` default.
+- ✅ **Fixed `buildMobileAppJsonLd` emitting `installUrl: []`** for an app with no store listing — an empty array asserts the app installs from nowhere. Now `installUrl`/`sameAs` are omitted together when there are no links; First Bite's output is byte-identical.
+- ✅ `verify-routes.mjs` now requires `/projects/sunnah-habit-tracker` in the sitemap; the prerender assertions pick the route up automatically. Build green, `npm run verify` all-pass, suite 48/48. Page chunk 25 KB (7.8 KB gzipped); initial JS unchanged at 117 KB gzipped, budget 180 KB.
+- ⏳ **Not deployed yet** — this is committed locally only; push + Coolify deploy still to run.
 
 ### 2026-08-17 (later)
 - ✅ **Prerendered per-route `<head>` for the 7 First Bite routes** (`scripts/prerender.mjs`, runs on `postbuild`). Closes the one gap the render test left: link unfurlers and AI crawlers read raw HTML and never run JS, so every article previewed as "Next Tech Labs — software, shipped." with the studio's default image. Now each route ships real title, description, canonical, robots, OG, Twitter and JSON-LD. **Scope is `<head>` only** — body stays `<div id="root"></div>`, React boots unchanged, no SSR bundle, no hydration.
@@ -123,6 +132,18 @@ _Move items here when started, move out when done._
 ## Decisions log
 
 > Capture every non-obvious technical or design decision so future-you / future-AI doesn't redebate it.
+
+### 2026-08-24 — Sunnah Habit Tracker ships as `beta` with placeholder store badges
+**Context**: The app is finished (all 14 roadmap phases, v1.0, iOS and Android builds run) and the obvious move was to list it `live` like First Bite.
+**Decision**: `status: 'beta'`, `links: {}`, hero badge reads "In closed testing — iOS + Android", and both store badges render the grayscale "Coming soon" state.
+**Why**: Measured, not assumed. `apps.apple.com/.../id6787725612` and `play.google.com/...?id=com.nextechlabs.sunnah` both return **404** — closed-testing tracks are not public listings. The App Store Connect record exists (ASC 6787725612) and the newest commit in the app repo is a submit profile for the Play closed-testing track, so "in closed testing" is exactly true. Brand value #1 is that everything here has shipped, is shipping, or is honestly labelled.
+**Reversal cost**: Trivial. Fill `links.appStore` / `links.playStore` in `data/projects.js`, drop the URLs into `SunnahBadges`, flip `status` to `live`, and the badges, the card, the status dot and the sitemap's contact-route rule all follow.
+
+### 2026-08-24 — Sunnah's legal pages stay on the app's own domain
+**Context**: First Bite's privacy/terms/support/delete-account live under `nextechlabs.org/projects/first-bite/*`, so the reflex was to build the same four pages here.
+**Decision**: Don't. The showcase page links out to `sunnah.nextechlabs.tech/{privacy,terms,delete-account}`.
+**Why**: The app repo already ships and hosts `apps/legal-site` at that domain (verified 200), and those are the URLs the app's settings screen and the store submission forms point at. Copying them onto this site creates two canonical policies that will drift, and Apple/Google would then be reading the copy nobody remembers to update.
+**Reversal cost**: Low — the pattern (`FirstBiteLegalLayout` + `legalProse`) is right there if the app ever drops its own site.
 
 ### 2026-08-15 — Runtime `<head>` injection, not SSR/prerender (for now)
 **Context**: The blog exists to rank. A client-rendered SPA ships one `index.html` with one set of meta tags for every route.
@@ -196,6 +217,7 @@ _Things knowingly deferred. Each entry has an owner and an exit criterion._
 - **Prerender covers First Bite routes only** — `/`, `/projects`, `/about` and the rest still serve the site-wide defaults. Extend `prerenderRoutes()` in `lib/routeSeo.js` when another page needs its own preview. Owner: tech lead.
 - **No 1200×630 OG art** — social cards currently reuse square assets (`/intro-poster.png`, the First Bite icon), which platforms crop. Exit when the M2 OG-image generator lands; `SITE.defaultImage` in `lib/seo.js` is the single swap point. Owner: design.
 - **Blog posts statically imported** — all five prose modules load in one chunk (16 KB gzipped). Exit at ~20 posts: switch `postModules` in `BlogPostPage.jsx` to `lazy()`. Owner: tech lead.
+- **Sunnah Habit Tracker store badges are placeholders** — both listings are in closed testing, so the page ships the grayscale "Coming soon" pair and `links: {}`. Exit when either store listing goes public: set `links.appStore` / `links.playStore`, pass them to `SunnahBadges`, flip `status` to `live`, re-run `npm run sitemap`. Owner: product.
 - **No automated test suite** — acceptable while site is single-author and content-only. Add Vitest + React Testing Library if interactive features grow (filter, search, modal flows). Owner: tech lead.
 
 ---

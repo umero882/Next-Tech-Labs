@@ -143,8 +143,9 @@ export function buildMobileAppJsonLd(app) {
     operatingSystem: 'iOS, Android',
     url: absoluteUrl(app.path),
     image: absoluteUrl(app.image || SITE.defaultImage),
-    installUrl: sameAs,
-    ...(sameAs.length ? { sameAs } : {}),
+    // Omitted entirely before a listing exists — an empty installUrl array is a
+    // claim that the app installs from nowhere, which validators flag.
+    ...(sameAs.length ? { installUrl: sameAs, sameAs } : {}),
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
   };
